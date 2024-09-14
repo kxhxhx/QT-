@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>EIChangeSlider</class>
+ <widget class="QWidget" name="EIChangeSlider">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>421</width>
+    <height>152</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_2">
+   <property name="leftMargin">
+    <number>5</number>
+   </property>
+   <property name="topMargin">
+    <number>5</number>
+   </property>
+   <property name="rightMargin">
+    <number>5</number>
+   </property>
+   <property name="bottomMargin">
+    <number>5</number>
+   </property>
+   <item row="0" column="0">
+    <widget class="QFrame" name="frame">
+     <property name="styleSheet">
+      <string notr="true">background-color: white;
+border: 1px solid #b6b6b6;
+border-radius: 10px;</string>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::Shape::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Shadow::Raised</enum>
+     </property>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="0">
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <item>
+         <widget class="QLabel" name="label_Data">
+          <property name="styleSheet">
+           <string notr="true">border: none;
+</string>
+          </property>
+          <property name="text">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;TextLabel&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSlider" name="horizontalSlider_Data">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QSlider {
+    border: none;
+}
+QSlider::groove:horizontal {
+    border: 1px solid #bbb;
+    background: #e1e1e1;
+    height: 10px;
+    border-radius: 5px;
+}
+QSlider::sub-page:horizontal {
+    background: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(55, 155, 255, 255), stop:1 rgba(55, 155, 255, 255));
+    border: 1px solid #bbb;
+    height: 10px;
+    border-radius: 5px;
+}
+
+QSlider::add-page:horizontal {
+    background: #e1e1e1;
+    border: 1px solid #bbb;
+    height: 10px;
+    border-radius: 5px;
+}
+
+QSlider::handle:horizontal {
+    background: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 rgba(255, 255, 255, 255), stop:0.495 rgba(100, 100, 100, 255), stop:0.505 rgba(82, 82, 82, 255), stop:1 rgba(255, 255, 255, 255));
+    border: 1px solid #777;
+    width: 13px;
+    margin-top: -2px;
+    margin-bottom: -2px;
+    border-radius: 7px;
+};
+</string>
+          </property>
+          <property name="orientation">
+           <enum>Qt::Orientation::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <item>
+           <widget class="QLabel" name="label_Name">
+            <property name="styleSheet">
+             <string notr="true">border : none
+</string>
+            </property>
+            <property name="text">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;TextLabel&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QDoubleSpinBox" name="doubleSpinBox_Data">
+            <property name="styleSheet">
+             <string notr="true">QDoubleSpinBox::up-button {
+    /* 设置上箭头的样式 */
+    subcontrol-origin: border;
+    subcontrol-position: top right;
+    width: 20px;
+    border-width: 1px;
+    border-color: #999999;
+    border-style: solid;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 0px;
+    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 #FFFFFF, stop:1 #E6E6E6);
+}
+QDoubleSpinBox::up-button:hover {
+    /* 设置上箭头在鼠标悬停时的样式 */
+    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 #F2F2F2, stop:1 #E0E0E0);
+}
+
+QDoubleSpinBox::up-button:pressed {
+    /* 设置上箭头在按下时的样式 */
+    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 #E0E0E0, stop:1 #F2F2F2);
+}
+
+QDoubleSpinBox::down-button {
+    /* 设置下箭头的样式 */
+    subcontrol-origin: border;
+    subcontrol-position: bottom right;
+    width: 20px;
+    border-width: 1px;
+    border-color: #999999;
+    border-style: solid;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 3px;
+    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 #FFFFFF, stop:1 #E6E6E6);
+}
+
+QDoubleSpinBox::down-button:hover {
+    /* 设置下箭头在鼠标悬停时的样式 */
+    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 #F2F2F2, stop:1 #E0E0E0);
+}
+
+QDoubleSpinBox::down-button:pressed {
+    /* 设置下箭头在按下时的样式 */
+    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 #E0E0E0, stop:1 #F2F2F2);
+}</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

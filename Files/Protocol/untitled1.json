@@ -1,0 +1,58 @@
+{
+    "File": {
+        "untitled2": {
+            "CRC": "None",
+            "Data": "None",
+            "DataHead": "None",
+            "DataTail": "None",
+            "FunctionCode": "None",
+            "SlaveAddress": "None",
+            "Time": "2024/08/25 20:31",
+            "Type": 3
+        },
+        "untitled3": {
+            "CRC": "None",
+            "Data": "None",
+            "DataHead": "None",
+            "DataTail": "None",
+            "FunctionCode": "None",
+            "SlaveAddress": "None",
+            "Time": "2024/08/25 20:31",
+            "Type": 3
+        },
+        "untitled4": {
+            "CRC": "None",
+            "Data": "None",
+            "DataHead": "None",
+            "DataTail": "None",
+            "FunctionCode": "None",
+            "SlaveAddress": "None",
+            "Time": "2024/08/25 20:31",
+            "Type": 3
+        },
+        "untitledGroup2": {
+            "Group": {
+            },
+            "Time": "2024/08/25 20:31",
+            "Type": 2
+        },
+        "untitledGroup3": {
+            "Group": {
+                "untitled": {
+                    "CRC": "None",
+                    "Data": "None",
+                    "DataHead": "None",
+                    "DataTail": "None",
+                    "FunctionCode": "None",
+                    "SlaveAddress": "None",
+                    "Time": "2024/08/25 20:31",
+                    "Type": 3
+                }
+            },
+            "Time": "2024/08/25 20:31",
+            "Type": 2
+        }
+    },
+    "Type": 1,
+    "Version": "Version 1.0 "
+}

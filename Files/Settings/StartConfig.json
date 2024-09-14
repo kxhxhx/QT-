@@ -1,0 +1,21 @@
+{
+    "DataEngineSettings": {
+        "BaudRate": "921600",
+        "CheckBits": "None",
+        "Data Test": 1,
+        "DataBits": "8",
+        "DataEngineSelect": 0,
+        "FlowControl": "None",
+        "SerialPort": 0,
+        "StopBits": "1"
+    },
+    "ProtocolSettings": {
+        "DefaultProtocol": 0,
+        "ProtocolSelect": 0
+    },
+    "SettingVersion": 0,
+    "ViewLayoutSettings": {
+        "DefaultViewLayoutJsonObj": 0,
+        "ViewLayoutSelect": 0
+    }
+}
