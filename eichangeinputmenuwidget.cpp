@@ -5,7 +5,6 @@ EIChangeInputMenuWidget::EIChangeInputMenuWidget(QWidget *Parent, EIChangeBaseMe
     :EIChangeBaseMenuWidget(Parent)
 {
     this->installEventFilter(this);
-    // this->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     this->setMinimumHeight(30);
 
     Layout = new QHBoxLayout(this);
@@ -58,9 +57,9 @@ EIChangeInputMenuWidget::EIChangeInputMenuWidget(QWidget *Parent, EIChangeBaseMe
 
 bool EIChangeInputMenuWidget::eventFilter(QObject *obj, QEvent *event)
 {
-    if((event->type() == QEvent::MouseButtonPress))
+    if(((obj != InputEdit)||(obj != Button))&&(event->type() == QEvent::MouseButtonPress))
     {
-        QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event);
+        // QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event);
         if (InputEdit->hasFocus())
         {
             DisplayCheckButtonText();
@@ -72,7 +71,6 @@ bool EIChangeInputMenuWidget::eventFilter(QObject *obj, QEvent *event)
 
 void EIChangeInputMenuWidget::mouseReleaseEvent(QMouseEvent *event)
 {
-
     EIChangeBaseMenuWidget::mouseReleaseEvent(event);
 }
 
@@ -96,21 +94,16 @@ void EIChangeInputMenuWidget::DisplayCheckButtonText()
 
 void EIChangeInputMenuWidget::DisplayTextChange(QString Text)
 {
-    // QFontMetrics metrics(InputEdit->font());
-    // int textWidth = metrics.boundingRect(InputEdit->text()).width() + 20;
-    // qDebug() << textWidth << DefaultTextInputWidth << Label->width() << ChildMenu->width();
-    // if(DefaultTextInputWidth >= textWidth)
-    // {
-    //     InputEdit->setFixedWidth(DefaultTextInputWidth);
-    // }
-    // else
-    // {
-    //     InputEdit->setFixedWidth(textWidth);
-    // }
-    // this->adjustSize();
-    QSize LineEditLength = QSize(InputEdit->fontMetrics().horizontalAdvance(Text) + 20, 30);
-    InputEdit->setFixedSize(LineEditLength);
-    qDebug() << this->width();
+    QSize LineEditLength = QSize(InputEdit->fontMetrics().horizontalAdvance(Text), 30);
+    if(DefaultTextInputWidth >= LineEditLength.width())
+    {
+        LineEditLength.setWidth(DefaultTextInputWidth);
+        InputEdit->setFixedSize(LineEditLength);
+    }
+    else
+    {
+        InputEdit->setFixedSize(LineEditLength);
+    }
     int MenuMinWidth = 0;
     for(QAction *Action : ChildMenu->actions())
     {
@@ -120,19 +113,14 @@ void EIChangeInputMenuWidget::DisplayTextChange(QString Text)
             if (widget)
             {
                 MenuMinWidth = qMax(MenuMinWidth, widget->sizeHint().width());
-                qDebug() << " widget " << widget->sizeHint().width();
-                qDebug() << widgetAction->text();
             }
         }
         else
         {
             MenuMinWidth = qMax(MenuMinWidth, Action->text().size());
-            qDebug() << " Action "<< Action->text().size();
         }
-        // qDebug() << this->width() << MenuMinWidth << textWidth;
     }
-
     ChildMenu->setFixedWidth(MenuMinWidth);
     ChildMenu->adjustSize();
-    // qDebug() << this->width() << MenuMinWidth << textWidth;
+
 }

@@ -31,12 +31,12 @@ void EIChangeBaseMenu::mouseReleaseEvent(QMouseEvent *event)
 
     if(Action)
     {
-        if(Action->property("Type").toInt() == EIChangeBaseMenu::CheckandInput)
+        int Type = Action->property("Type").toInt();
+        if((Type == EIChangeBaseMenu::CheckandInput)||(Type == EIChangeBaseMenu::Check)||(Type == EIChangeBaseMenu::Input))
         {
             emit CheckActionTrigger(Action);
             return;
         }
-
     }
 
     QMenu::mouseReleaseEvent(event);

@@ -4,11 +4,12 @@ EIChangeCheckMenuWidget::EIChangeCheckMenuWidget(QWidget *Parent, QMenu *Menu, Q
     :EIChangeBaseMenuWidget(Parent)
 {
     this->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
-    this->setMinimumHeight(30); // 设定最小高度为50像素
+    this->setMinimumHeight(30);
 
     Layout = new QHBoxLayout(this);
-
+    Layout->setContentsMargins(1, 1, 20, 1);
     Spacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Fixed);
+    QSpacerItem *CheckButtonSpacer = new QSpacerItem(5, 30, QSizePolicy::Fixed, QSizePolicy::Fixed);
     CheckType = Type;
     if(CheckType == EIChangeBaseMenu::CheckandInput)
     {
@@ -16,25 +17,30 @@ EIChangeCheckMenuWidget::EIChangeCheckMenuWidget(QWidget *Parent, QMenu *Menu, Q
         InputEdit->setVisible(false);
         InputEdit->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
         Button = new QPushButton(Data, this);
-        // Button->setStyleSheet(
-        //     "QPushButton {"
-        //     "   font-family: 'Times New Roman';"
-        //     "   font-size: 21px;"
-        //     "   background-color: transparent;"
-        //     "}"
-        //     );
     }
 
-    CheckButton = new QRadioButton(Text, this);
+    CheckButton = new QRadioButton(this);
+    CheckButton->setFixedSize(20, 30);
     CheckButton->installEventFilter(this);
+
+
+    QWidget *Line = new QWidget(this);
+    Line->setFixedWidth(2);  // 设置宽度
+    Line->setStyleSheet("background-color: white;");  // 设置背景颜色
+    Layout->addItem(CheckButtonSpacer);
     Layout->addWidget(CheckButton);
+
+    Layout->addWidget(Line);
+
+
     if(CheckType == EIChangeBaseMenu::CheckandInput)
     {
         Layout->addWidget(Button);
         Layout->addWidget(InputEdit, 1);
+        Layout->addItem(Spacer);
     }
 
-    Layout->addItem(Spacer);
+
 
     if(CheckType == EIChangeBaseMenu::CheckandInput)
     {
@@ -60,8 +66,7 @@ bool EIChangeCheckMenuWidget::eventFilter(QObject *obj, QEvent *event)
 {
     if((InputEdit != obj || obj != Button)&&(event->type() == QEvent::MouseButtonPress))
     {
-        QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event);
-        // mouseReleaseEvent(mouseEvent);
+        // QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event);
         if(CheckType == EIChangeBaseMenu::CheckandInput)
         {
             if (InputEdit->hasFocus())

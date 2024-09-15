@@ -26,7 +26,7 @@ void EIChangeAttribute::ViewAddMenu(const MenuAttribute &Attribute, EIChangeBase
 
         for(const MenuAttribute* child : Attribute.Child)
         {
-            if(child->Type == EIChangeBaseMenu::Check || child->Type == EIChangeBaseMenu::CheckandInput)
+            if(child->Type == EIChangeBaseMenu::Check || child->Type == EIChangeBaseMenu::CheckandInput || child->Type == EIChangeBaseMenu::Input)
             {
                 connect(ChildMenu, SIGNAL(CheckActionTrigger(QAction*)), this, SLOT(RightClick(QAction*)));
                 break;
@@ -44,8 +44,6 @@ void EIChangeAttribute::ViewAddMenu(const MenuAttribute &Attribute, EIChangeBase
         {
             QAction *Action = new QAction(Attribute.Name);
             Menu->addAction(Action);
-
-            // qDebug() << Menu->size();
             if(Attribute.Parent == nullptr)
                 connect(Action,SIGNAL(triggered(bool)),this,SLOT(RightClickAction(bool)));
         }
@@ -54,12 +52,11 @@ void EIChangeAttribute::ViewAddMenu(const MenuAttribute &Attribute, EIChangeBase
             EIChangeInputMenuWidget *Container = new EIChangeInputMenuWidget(nullptr, Menu, Attribute.Name, Attribute.Data);
             QWidgetAction *WidgetAction = new QWidgetAction(Menu);
             WidgetAction->setText(Attribute.Name);
+            WidgetAction->setProperty("Type", EIChangeBaseMenu::Input);
             WidgetAction->setDefaultWidget(Container);
             Menu->addAction(WidgetAction);
 
             connect(Container, SIGNAL(EnterWidgetAction()), Menu, SLOT(ActiontoWidgetAction()));
-
-
             if(Attribute.Parent == nullptr)
                 connect(WidgetAction, SIGNAL(triggered(bool)), this, SLOT(RightClickAction(bool)));
         }

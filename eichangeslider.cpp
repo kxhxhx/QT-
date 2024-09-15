@@ -31,17 +31,21 @@ EIChangeSlider::EIChangeSlider(QWidget *Parent)
     Attribute->RightMenuText.append(Settings);
 
     EIChangeAttribute::MenuAttribute* Actions = new EIChangeAttribute::MenuAttribute("Actions");
+    new EIChangeAttribute::MenuAttribute("Reset", EIChangeBaseMenu::Text, Actions);
     new EIChangeAttribute::MenuAttribute("Move: ", EIChangeBaseMenu::CheckandInput, Actions, "00 00 00 00");
     new EIChangeAttribute::MenuAttribute("Release: ", EIChangeBaseMenu::CheckandInput, Actions, "00 00 00 00");
     new EIChangeAttribute::MenuAttribute("Edited: ", EIChangeBaseMenu::CheckandInput, Actions, "00 00 00 00");
+
+    new EIChangeAttribute::MenuAttribute("Step: ", EIChangeBaseMenu::Input, Actions, "1");
     Attribute->RightMenuText.append(Actions);
 
-    // EIChangeAttribute::MenuAttribute* TestMenu0 = new EIChangeAttribute::MenuAttribute("TestMenu0");
-    // EIChangeAttribute::MenuAttribute* TestMenu1 = new EIChangeAttribute::MenuAttribute("TestMenu1", EIChangeBaseMenu::CheckandInput, TestMenu0);
-    // EIChangeAttribute::MenuAttribute* TestMenu2 = new EIChangeAttribute::MenuAttribute("TestMenu2", EIChangeBaseMenu::CheckandInput, TestMenu1);
-    // EIChangeAttribute::MenuAttribute* TestMenu3 = new EIChangeAttribute::MenuAttribute("TestMenu3", EIChangeBaseMenu::CheckandInput, TestMenu2);
+    EIChangeAttribute::MenuAttribute* TestMenu0 = new EIChangeAttribute::MenuAttribute("TestMenu0");
+    EIChangeAttribute::MenuAttribute* TestMenu = new EIChangeAttribute::MenuAttribute("TestMenu0", EIChangeBaseMenu::Text, TestMenu0);
+    EIChangeAttribute::MenuAttribute* TestMenu1 = new EIChangeAttribute::MenuAttribute("TestMenu1", EIChangeBaseMenu::Check, TestMenu0);
+    EIChangeAttribute::MenuAttribute* TestMenu2 = new EIChangeAttribute::MenuAttribute("TestMenu2", EIChangeBaseMenu::Check, TestMenu0);
+    EIChangeAttribute::MenuAttribute* TestMenu3 = new EIChangeAttribute::MenuAttribute("TestMenu3", EIChangeBaseMenu::Check, TestMenu0);
     // EIChangeAttribute::MenuAttribute* TestMenu4 = new EIChangeAttribute::MenuAttribute("TestMenu4", EIChangeBaseMenu::CheckandInput, TestMenu3);
-    // Attribute->RightMenuText.append(TestMenu0);
+    Attribute->RightMenuText.append(TestMenu0);
 
     connect(this->Attribute, SIGNAL(Click(QAction*)), this, SLOT(RightClick(QAction*)));
     connect(this, SIGNAL(DoubleSpinBoxEditingFinished(int)), this, SLOT(SliderAction(int)));

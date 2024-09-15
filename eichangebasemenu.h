@@ -36,6 +36,10 @@ public:
         CheckandInput,
     };
     QAction *Action;
+
+    int CheckInterLock = 0;
+
+
 signals:
     void CheckActionTrigger(QAction *Action);
 
