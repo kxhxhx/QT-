@@ -8,8 +8,8 @@ EIChangeCheckMenuWidget::EIChangeCheckMenuWidget(QWidget *Parent, QMenu *Menu, Q
 
     Layout = new QHBoxLayout(this);
     Layout->setContentsMargins(1, 1, 20, 1);
-    Spacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Fixed);
-    QSpacerItem *CheckButtonSpacer = new QSpacerItem(5, 30, QSizePolicy::Fixed, QSizePolicy::Fixed);
+    Spacer = new QSpacerItem(20, 20, QSizePolicy::Expanding, QSizePolicy::Fixed);
+    QSpacerItem *CheckButtonSpacer = new QSpacerItem(10, 30, QSizePolicy::Fixed, QSizePolicy::Fixed);
     CheckType = Type;
     if(CheckType == EIChangeBaseMenu::CheckandInput)
     {
@@ -19,18 +19,11 @@ EIChangeCheckMenuWidget::EIChangeCheckMenuWidget(QWidget *Parent, QMenu *Menu, Q
         Button = new QPushButton(Data, this);
     }
 
-    CheckButton = new QRadioButton(this);
-    CheckButton->setFixedSize(20, 30);
+    CheckButton = new QRadioButton(Text, this);
     CheckButton->installEventFilter(this);
 
-
-    QWidget *Line = new QWidget(this);
-    Line->setFixedWidth(2);  // 设置宽度
-    Line->setStyleSheet("background-color: white;");  // 设置背景颜色
     Layout->addItem(CheckButtonSpacer);
     Layout->addWidget(CheckButton);
-
-    Layout->addWidget(Line);
 
 
     if(CheckType == EIChangeBaseMenu::CheckandInput)
@@ -45,13 +38,12 @@ EIChangeCheckMenuWidget::EIChangeCheckMenuWidget(QWidget *Parent, QMenu *Menu, Q
     if(CheckType == EIChangeBaseMenu::CheckandInput)
     {
         DefaultTextInputWidth = InputEdit->width();
-            // DefaultMenuWidth = TestMenu->width();
 
-        TestMenu = Menu;
-        TestMenu->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+        ChildMenu = Menu;
+        ChildMenu->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
         this->adjustSize();
-        TestMenu->setMinimumWidth(this->width());
+        ChildMenu->setMinimumWidth(this->width());
 
 
 
@@ -66,7 +58,6 @@ bool EIChangeCheckMenuWidget::eventFilter(QObject *obj, QEvent *event)
 {
     if((InputEdit != obj || obj != Button)&&(event->type() == QEvent::MouseButtonPress))
     {
-        // QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event);
         if(CheckType == EIChangeBaseMenu::CheckandInput)
         {
             if (InputEdit->hasFocus())
@@ -106,23 +97,23 @@ void EIChangeCheckMenuWidget::mouseReleaseEvent(QMouseEvent *event)
 
 void EIChangeCheckMenuWidget::DisplayInput()
 {
-    Button->setVisible(false);
-
     InputEdit->setText(Button->text());
     InputEdit->setVisible(true);
     InputEdit->setFocus();
+    Button->setVisible(false);
 }
 
 void EIChangeCheckMenuWidget::DisplayCheckButtonText()
 {
-    InputEdit->setVisible(false);
-    Button->setText(InputEdit->text());
     Button->setVisible(true);
+    Button->setFocus();
+    InputEdit->setVisible(false);
+    Button->setGeometry(InputEdit->x(), InputEdit->y(), InputEdit->width(), InputEdit->height());
+    Button->setText(InputEdit->text());
 }
 
 void EIChangeCheckMenuWidget::DisplayTextChange(QString Text)
 {
-
     QFontMetrics metrics(InputEdit->font());
     int textWidth = metrics.boundingRect(InputEdit->text()).width() + 20;
     if(DefaultTextInputWidth >= textWidth)
@@ -134,8 +125,9 @@ void EIChangeCheckMenuWidget::DisplayTextChange(QString Text)
         InputEdit->setFixedWidth(textWidth);
     }
 
+
     int MenuMinWidth = 0;
-    for(QAction *Action : TestMenu->actions())
+    for(QAction *Action : ChildMenu->actions())
     {
         if (QWidgetAction *widgetAction = qobject_cast<QWidgetAction*>(Action))
         {
@@ -143,17 +135,30 @@ void EIChangeCheckMenuWidget::DisplayTextChange(QString Text)
             if (widget)
             {
                 MenuMinWidth = qMax(MenuMinWidth, widget->sizeHint().width());
-                qDebug() << " widget " << widget->sizeHint().width();
             }
         }
         else
         {
             MenuMinWidth = qMax(MenuMinWidth, Action->text().size());
-            qDebug() << " Action " << Action->text().size();
+
         }
     }
 
-    TestMenu->setFixedWidth(MenuMinWidth);
-    TestMenu->adjustSize();
-    qDebug() << this->width() << MenuMinWidth << textWidth;
+    ChildMenu->setFixedWidth(MenuMinWidth);
+    ChildMenu->adjustSize();
+
+}
+
+void EIChangeCheckMenuWidget::CheckInterLocked()
+{
+    qDebug() << "CheckInterLocked";
+    if(CheckButton->isChecked())
+    {
+        CheckButton->setChecked(false);
+
+    }
+    else
+    {
+        CheckButton->setChecked(true);
+    }
 }

@@ -18,11 +18,13 @@ class EIChangeBaseMenu : public QMenu
 public:
     explicit EIChangeBaseMenu(QWidget *parent = nullptr)
     : QMenu(parent) {
+        setFocusPolicy(Qt::NoFocus);
 
     }
 
     explicit EIChangeBaseMenu(const QString &title, QWidget *parent = nullptr)
     : QMenu(title, parent) {
+        setFocusPolicy(Qt::NoFocus);
 
     }
 
@@ -42,6 +44,7 @@ public:
 
 signals:
     void CheckActionTrigger(QAction *Action);
+    void CheckInterLocked();
 
 public slots:
     void ActiontoWidgetAction();

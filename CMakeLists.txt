@@ -65,6 +65,8 @@ else()
             eichangeattribute.h eichangeattribute.cpp
             eichangeinputmenuwidget.h eichangeinputmenuwidget.cpp
 
+            eichangewidgetaction.h eichangewidgetaction.cpp
+
 
 
 

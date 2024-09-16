@@ -7,7 +7,7 @@ EIChangeBaseMenu::~EIChangeBaseMenu()
 
 void EIChangeBaseMenu::ActiontoWidgetAction()
 {
-    setActiveAction(nullptr);
+    qDebug() << "set nullptr";
 }
 
 bool EIChangeBaseMenu::eventFilter(QObject *obj, QEvent *event)
@@ -35,6 +35,7 @@ void EIChangeBaseMenu::mouseReleaseEvent(QMouseEvent *event)
         if((Type == EIChangeBaseMenu::CheckandInput)||(Type == EIChangeBaseMenu::Check)||(Type == EIChangeBaseMenu::Input))
         {
             emit CheckActionTrigger(Action);
+            event->ignore();
             return;
         }
     }
@@ -55,13 +56,11 @@ void EIChangeBaseMenu::keyPressEvent(QKeyEvent * event)
 
 void EIChangeBaseMenu::leaveEvent(QEvent *event)
 {
-
     QMenu::leaveEvent(event);
 
 }
 
 void EIChangeBaseMenu::enterEvent(QEvent *event)
 {
-
     QMenu::enterEvent(event);
 }

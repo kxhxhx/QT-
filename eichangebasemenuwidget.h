@@ -28,11 +28,15 @@ public:
 public slots:
     void Hovered();
     void Leaved();
+    void Press();
+    void Release();
 
 signals:
     void EnterWidgetAction();
+    void Actived();
 protected:
     bool eventFilter(QObject *obj, QEvent *event) override;
+    void mousePressEvent(QMouseEvent *event) override;
     void mouseReleaseEvent(QMouseEvent *event) override;
     void enterEvent(QEvent *event) override;
     void leaveEvent(QEvent *event) override;

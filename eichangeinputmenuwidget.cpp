@@ -12,12 +12,7 @@ EIChangeInputMenuWidget::EIChangeInputMenuWidget(QWidget *Parent, EIChangeBaseMe
     Label = new QLabel(Name, this);
     Label->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     Spacer = new QSpacerItem(10, 30, QSizePolicy::Expanding, QSizePolicy::Fixed);
-    IconSpacer = new QSpacerItem(33, 30, QSizePolicy::Fixed, QSizePolicy::Fixed);
-
-    QWidget *Line = new QWidget(this);
-    Line->setFixedWidth(2);  // 设置宽度
-    Line->setStyleSheet("background-color: white;");  // 设置背景颜色
-
+    IconSpacer = new QSpacerItem(40, 30, QSizePolicy::Fixed, QSizePolicy::Fixed);
 
     InputEdit = new QLineEdit(this);
     InputEdit->setVisible(false);
@@ -26,21 +21,16 @@ EIChangeInputMenuWidget::EIChangeInputMenuWidget(QWidget *Parent, EIChangeBaseMe
     Button = new QPushButton(Data, this);
 
     Layout->addItem(IconSpacer);
-    Layout->addWidget(Line);
     Layout->addWidget(Label);
 
     QHBoxLayout *Layout1 = new QHBoxLayout();
-
     Layout1->addWidget(Button);
     Layout1->addWidget(InputEdit);
 
     Layout->addLayout(Layout1);
-
     Layout->addItem(Spacer);
 
-
     DefaultTextInputWidth = InputEdit->width();
-
     ChildMenu = Menu;
     ChildMenu->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     this->adjustSize();
@@ -59,12 +49,12 @@ bool EIChangeInputMenuWidget::eventFilter(QObject *obj, QEvent *event)
 {
     if(((obj != InputEdit)||(obj != Button))&&(event->type() == QEvent::MouseButtonPress))
     {
-        // QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event);
         if (InputEdit->hasFocus())
         {
             DisplayCheckButtonText();
+            return true;
         }
-        return true;
+
     }
     return EIChangeBaseMenuWidget::eventFilter(obj, event);
 }
@@ -76,20 +66,19 @@ void EIChangeInputMenuWidget::mouseReleaseEvent(QMouseEvent *event)
 
 void EIChangeInputMenuWidget::DisplayInput()
 {
-    Button->setVisible(false);
-    // InputEdit->setGeometry(Button->x(), Button->y(), InputEdit->width(), InputEdit->height());
     InputEdit->setText(Button->text());
     InputEdit->setVisible(true);
     InputEdit->setFocus();
+    Button->setVisible(false);
 }
 
 void EIChangeInputMenuWidget::DisplayCheckButtonText()
 {
+    Button->setVisible(true);
+    Button->setFocus();
     InputEdit->setVisible(false);
     Button->setGeometry(InputEdit->x(), InputEdit->y(), InputEdit->width(), InputEdit->height());
     Button->setText(InputEdit->text());
-
-    Button->setVisible(true);
 }
 
 void EIChangeInputMenuWidget::DisplayTextChange(QString Text)

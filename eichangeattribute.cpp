@@ -18,8 +18,8 @@ void EIChangeAttribute::ViewAddMenu(const MenuAttribute &Attribute, EIChangeBase
     {
         QAction *Action = Menu->addAction(Attribute.Name);
         EIChangeBaseMenu *ChildMenu = new EIChangeBaseMenu(Attribute.Name, Menu);
-        Action->setMenu(ChildMenu);
 
+        Action->setMenu(ChildMenu);
         if(Attribute.Parent == nullptr)
             connect(ChildMenu,SIGNAL(triggered(QAction*)),this,SLOT(RightClick(QAction*)));
 
@@ -44,45 +44,51 @@ void EIChangeAttribute::ViewAddMenu(const MenuAttribute &Attribute, EIChangeBase
         {
             QAction *Action = new QAction(Attribute.Name);
             Menu->addAction(Action);
+
             if(Attribute.Parent == nullptr)
                 connect(Action,SIGNAL(triggered(bool)),this,SLOT(RightClickAction(bool)));
         }
         else if(Attribute.Type == EIChangeBaseMenu::Input)
         {
             EIChangeInputMenuWidget *Container = new EIChangeInputMenuWidget(nullptr, Menu, Attribute.Name, Attribute.Data);
-            QWidgetAction *WidgetAction = new QWidgetAction(Menu);
+            EIChangeWidgetAction *WidgetAction = new EIChangeWidgetAction(Menu);
             WidgetAction->setText(Attribute.Name);
             WidgetAction->setProperty("Type", EIChangeBaseMenu::Input);
             WidgetAction->setDefaultWidget(Container);
             Menu->addAction(WidgetAction);
 
-            connect(Container, SIGNAL(EnterWidgetAction()), Menu, SLOT(ActiontoWidgetAction()));
+            connect(Container, SIGNAL(EnterWidgetAction()), WidgetAction, SLOT(Actived()));
+
             if(Attribute.Parent == nullptr)
                 connect(WidgetAction, SIGNAL(triggered(bool)), this, SLOT(RightClickAction(bool)));
         }
         else if(Attribute.Type == EIChangeBaseMenu::Check)
         {
             EIChangeCheckMenuWidget *Container = new EIChangeCheckMenuWidget(nullptr, Menu, Attribute.Name, EIChangeBaseMenu::Check);
-            QWidgetAction *WidgetAction = new QWidgetAction(Menu);
+            EIChangeWidgetAction *WidgetAction = new EIChangeWidgetAction(Menu);
             WidgetAction->setText(Attribute.Name);
             WidgetAction->setProperty("Type", EIChangeBaseMenu::CheckandInput);
+
             WidgetAction->setDefaultWidget(Container);
             Menu->addAction(WidgetAction);
 
-            connect(Container, SIGNAL(EnterWidgetAction()), Menu, SLOT(ActiontoWidgetAction()));
+            connect(Container, SIGNAL(EnterWidgetAction()), WidgetAction, SLOT(Actived()));
             if(Attribute.Parent == nullptr)
                 connect(WidgetAction, SIGNAL(triggered(bool)), this, SLOT(RightClickAction(bool)));
         }
         else if(Attribute.Type == EIChangeBaseMenu::CheckandInput)
         {
             EIChangeCheckMenuWidget *Container = new EIChangeCheckMenuWidget(nullptr, Menu, Attribute.Name, EIChangeBaseMenu::CheckandInput, Attribute.Data);
-            QWidgetAction *WidgetAction = new QWidgetAction(Menu);
+            EIChangeWidgetAction *WidgetAction = new EIChangeWidgetAction(Menu);
             WidgetAction->setText(Attribute.Name);
             WidgetAction->setProperty("Type", EIChangeBaseMenu::CheckandInput);
+
+            if(Attribute.CheckInterLock)
+                connect(Menu, SIGNAL(CheckInterLocked()), Container, SLOT(CheckInterLocked()));
             WidgetAction->setDefaultWidget(Container);
             Menu->addAction(WidgetAction);
 
-            connect(Container, SIGNAL(EnterWidgetAction()), Menu, SLOT(ActiontoWidgetAction()));
+            connect(Container, SIGNAL(EnterWidgetAction()), WidgetAction, SLOT(Actived()));
             if(Attribute.Parent == nullptr)
                 connect(WidgetAction, SIGNAL(triggered(bool)), this, SLOT(RightClickAction(bool)));
         }

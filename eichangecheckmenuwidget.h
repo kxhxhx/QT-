@@ -5,7 +5,6 @@
 #include <QLabel>
 #include <QHBoxLayout>
 #include <QPushButton>
-#include <QCheckBox>
 #include <QRadioButton>
 #include <QLineEdit>
 
@@ -20,8 +19,7 @@ public:
 
     int CheckType;
     int DefaultTextInputWidth;
-    int DefaultMenuWidth;
-    QMenu *TestMenu;
+    QMenu *ChildMenu;
     QHBoxLayout *Layout;
     QSpacerItem *Spacer;
     EIChangeLineEdit *InputEdit;
@@ -37,6 +35,7 @@ private slots:
     void DisplayInput();
     void DisplayCheckButtonText();
     void DisplayTextChange(QString Text);
+    void CheckInterLocked();
 };
 
 #endif // EICHANGECHECKMENUWIDGET_H

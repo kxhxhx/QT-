@@ -19,8 +19,10 @@ EIChangeSlider::EIChangeSlider(QWidget *Parent)
     Attribute->RightMenuText.append(Delete);
 
     EIChangeAttribute::MenuAttribute* Name = new EIChangeAttribute::MenuAttribute("Name");
-    new EIChangeAttribute::MenuAttribute("BindProtocolName", EIChangeBaseMenu::Text, Name);
-    new EIChangeAttribute::MenuAttribute("CustomName: ", EIChangeBaseMenu::Input, Name, "Name");
+    EIChangeAttribute::MenuAttribute* BindProtocolName = new EIChangeAttribute::MenuAttribute("BindProtocolName", EIChangeBaseMenu::Check, Name);
+    BindProtocolName->CheckInterLock = true;
+    EIChangeAttribute::MenuAttribute* CustomName = new EIChangeAttribute::MenuAttribute("CustomName: ", EIChangeBaseMenu::CheckandInput, Name, "Name");
+    CustomName->CheckInterLock = true;
     Attribute->RightMenuText.append(Name);
 
     EIChangeAttribute::MenuAttribute* Settings = new EIChangeAttribute::MenuAttribute("Settings");
@@ -42,8 +44,7 @@ EIChangeSlider::EIChangeSlider(QWidget *Parent)
     EIChangeAttribute::MenuAttribute* TestMenu0 = new EIChangeAttribute::MenuAttribute("TestMenu0");
     EIChangeAttribute::MenuAttribute* TestMenu = new EIChangeAttribute::MenuAttribute("TestMenu0", EIChangeBaseMenu::Text, TestMenu0);
     EIChangeAttribute::MenuAttribute* TestMenu1 = new EIChangeAttribute::MenuAttribute("TestMenu1", EIChangeBaseMenu::Check, TestMenu0);
-    EIChangeAttribute::MenuAttribute* TestMenu2 = new EIChangeAttribute::MenuAttribute("TestMenu2", EIChangeBaseMenu::Check, TestMenu0);
-    EIChangeAttribute::MenuAttribute* TestMenu3 = new EIChangeAttribute::MenuAttribute("TestMenu3", EIChangeBaseMenu::Check, TestMenu0);
+    EIChangeAttribute::MenuAttribute* TestMenu2 = new EIChangeAttribute::MenuAttribute("TestMenu2", EIChangeBaseMenu::CheckandInput, TestMenu0);
     // EIChangeAttribute::MenuAttribute* TestMenu4 = new EIChangeAttribute::MenuAttribute("TestMenu4", EIChangeBaseMenu::CheckandInput, TestMenu3);
     Attribute->RightMenuText.append(TestMenu0);
 
@@ -65,15 +66,6 @@ EIChangeSlider::~EIChangeSlider()
 }
 bool EIChangeSlider::eventFilter(QObject *obj, QEvent *event)
 {
-    // if((obj == ui->label_Data || obj == ui->label_Name) && ((event->type() == QEvent::MouseButtonPress)||(event->type() == QEvent::MouseButtonDblClick)))
-    // {
-    //     return true;
-    // }
-
-    // if((obj == ui->label_Data || obj == ui->label_Name) && ((event->type() == QEvent::MouseButtonRelease)))
-    // {
-    //     qDebug()<<"release";
-    // }
     if(obj == ui->frame && event->type() == QEvent::Enter)
     {
         MouseState = EIChangeBaseWidget::Deafult;
@@ -102,38 +94,44 @@ void EIChangeSlider::RightClick(QAction *Action)
 {
     if(Action)
     {
-        QList<QString> ActionMenu;
-        ActionMenu.append(Action->text());
-        QMenu *RootMenu = qobject_cast<QMenu*>(Action->parent());
+        QList<QString> ActionMenuTextList;
+        QList<QAction*> ActionList;
+        ActionMenuTextList.append(Action->text());
+        EIChangeBaseMenu *RootMenu = qobject_cast<EIChangeBaseMenu*>(Action->parent());
         while(RootMenu)
         {
             QString LastTitle = RootMenu->title();
-            ActionMenu.append(LastTitle);
-            // qDebug() << "Action belongs to QMenu:" << LastTitle;
+            ActionMenuTextList.append(LastTitle);
+            qDebug() << "Action belongs to QMenu:" << LastTitle;
             QAction *AssociatedAction = RootMenu->menuAction();
-            RootMenu = qobject_cast<QMenu*>(AssociatedAction->parent());
+            ActionList.append(AssociatedAction);
+            RootMenu = qobject_cast<EIChangeBaseMenu*>(AssociatedAction->parent());
             if(LastTitle == RootMenu->title())
                 break;
         }
 
-        if(ActionMenu[ActionMenu.size() - 1] == Attribute->RightMenuText[0]->Name)
+        qDebug() << ActionMenuTextList;
+        if(ActionMenuTextList[ActionMenuTextList.size() - 1] == Attribute->RightMenuText[0]->Name)
         {
             this->deleteLater();
             return;
 
         }
-        // else if (ActionMenu[ActionMenu.size() - 1] == Attribute->RightMenuText[1]->Text)
-        // {
-        //     if(ActionMenu[ActionMenu.size() - 2] == Attribute->RightMenuText[1]->Child[0]->Text)
-        //     {
+        else if (ActionMenuTextList[ActionMenuTextList.size() - 1] == Attribute->RightMenuText[1]->Name)
+        {
+            if(ActionMenuTextList[ActionMenuTextList.size() - 2] == Attribute->RightMenuText[1]->Child[0]->Name)
+            {
 
-        //     }
-        //     else if(ActionMenu[ActionMenu.size() - 2] == Attribute->RightMenuText[1]->Child[1]->Text)
-        //     {
+                EIChangeBaseMenu *ChildMenu = qobject_cast<EIChangeBaseMenu*>(ActionList[ActionList.size() - 2]->parent());
+                emit ChildMenu->CheckInterLocked();
 
-        //     }
+            }
+            else if(ActionMenuTextList[ActionMenuTextList.size() - 2] == Attribute->RightMenuText[1]->Child[1]->Name)
+            {
 
-        // }
+            }
+
+        }
         // else if (ActionMenu[ActionMenu.size() - 1] == Attribute->RightMenuText[3]->Text)
         // {
 

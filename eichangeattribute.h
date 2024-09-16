@@ -13,10 +13,12 @@
 #include <QLineEdit>
 #include <QWidgetAction>
 
+#include "eichangewidgetaction.h"
 #include "eichangebasemenuwidget.h"
 #include "eichangebasemenu.h"
 #include "eichangecheckmenuwidget.h"
 #include "eichangeinputmenuwidget.h"
+
 class EIChangeAttribute : public QObject
 {
     Q_OBJECT
@@ -30,7 +32,7 @@ public:
         int Type;
         QList<MenuAttribute*> Child;
         MenuAttribute *Parent;
-
+        bool CheckInterLock = false;
         MenuAttribute(const QString &Text = " ", int Type = EIChangeBaseMenu::Text, MenuAttribute *Parent = nullptr, const QString &data = " ");
     };
 

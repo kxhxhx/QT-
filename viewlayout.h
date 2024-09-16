@@ -13,6 +13,8 @@
 #include "eichangeslider.h"
 #include "eichangedoubleslider.h"
 #include "eichangescope.h"
+
+
 namespace Ui {
 class ViewLayout;
 }
