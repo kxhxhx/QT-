@@ -74,7 +74,6 @@ public:
 
     void ViewLayoutViewAddFile(void);
 
-
     void AddProtocol(QModelIndex CurrentIndex, int CurrentType, int SetChildType, ProtocolData Data);
     void WriteProtocol(QModelIndex CurrentIndex);
     void ReadProtocol(QString ProtocolFilePath);

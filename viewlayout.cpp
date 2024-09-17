@@ -1,11 +1,12 @@
 #include "viewlayout.h"
 #include "ui_viewlayout.h"
-ViewLayout::ViewLayout(QWidget *parent)
+ViewLayout::ViewLayout(QWidget *parent, QJsonObject *Profiles)
     : QWidget(parent)
+    , Profiles(Profiles)
     , ui(new Ui::ViewLayout)
-    ,LineEditControlSearch(new QLineEdit(this))
-    ,isOpenLineEditControlSearch(false)
-    ,RClickMenu(new QMenu)
+    , LineEditControlSearch(new QLineEdit(this))
+    , isOpenLineEditControlSearch(false)
+    , RClickMenu(new QMenu)
 {
     ui->setupUi(this);
     this->installEventFilter(this);

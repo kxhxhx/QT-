@@ -16,6 +16,17 @@ bool EIChangeWidgetAction::eventFilter(QObject *obj, QEvent *event)
     return QWidgetAction::eventFilter(obj, event);
 }
 
+void EIChangeWidgetAction::CheckInterLocked()
+{
+    if(!this->property("PressCheck").toBool())
+    {
+        emit DisableCheck();
+        return;
+    }
+    this->setProperty("PressCheck", false);
+
+}
+
 void EIChangeWidgetAction::Actived()
 {
     QMenu *Menu = qobject_cast<QMenu*>(this->parent());
@@ -37,8 +48,5 @@ void EIChangeWidgetAction::Actived()
 
 void EIChangeWidgetAction::DisplayChildMenu()
 {
-    if(this->menu())
-        this->menu()->exec(QCursor::pos());
 
-    qDebug() << "DisplayChildMenu";
 }

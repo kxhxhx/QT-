@@ -55,6 +55,9 @@ void EIChangeFileView::ProtocolViewAddFile()
     EIChangeFileView::ProtocolData Data;
     Data.Name = ProtocolTree.GetNewName(TargetIndex, "untitled", ".json", 0);
     Data.Time = QDateTime::currentDateTime().toString("yyyy/MM/dd hh:mm");
+
+    if(Data.DataHead.isEmpty())
+        qDebug() << "Data.DataHead" << Data.DataHead;
     AddProtocol(TargetIndex, EIChangeTreeView::RootNode, EIChangeTreeView::File, Data);
     WriteProtocol(ProtocolTree.ModelTemp->index(ProtocolTree.ModelTemp->rowCount() - 1, 0, TargetIndex));
 
@@ -66,6 +69,8 @@ void EIChangeFileView::ProtocolViewAddGroup()
     EIChangeFileView::ProtocolData Data;
     Data.Name = ProtocolTree.GetNewName(TargetIndex, "untitledGroup", "", 1);
     Data.Time = QDateTime::currentDateTime().toString("yyyy/MM/dd hh:mm");
+
+
 
     int Type = ProtocolTree.ModelTemp->data(TargetIndex, Qt::UserRole + EIChangeTreeView::DataType).toInt();
     AddProtocol(TargetIndex, Type, EIChangeTreeView::Group, Data);
@@ -112,23 +117,18 @@ void EIChangeFileView::ViewLayoutViewAddFile()
     QModelIndex TargetIndex = ViewLayoutTree.ModelTemp->indexFromItem(TargetItem);
     EIChangeFileView::ViewLayoutData Data;
     Data.Name = ViewLayoutTree.GetNewName(TargetIndex, "untitled", ".json", 0);
-
     Data.Time = QDateTime::currentDateTime().toString("yyyy/MM/dd hh:mm");
     AddViewLayout(TargetIndex, EIChangeTreeView::RootNode, EIChangeTreeView::File, Data);
     // WriteProtocol(ViewLayoutTree.ModelTemp->index(ViewLayoutTree.ModelTemp->rowCount() - 1, 0, TargetIndex));
 
-    ViewLayout *test = new ViewLayout;
+    ViewLayout *CustomView = new ViewLayout();
     QString WindowTitle;
     if(Data.Name.indexOf(".json") != -1)
         WindowTitle = Data.Name.left(Data.Name.indexOf(".json"));
 
-    test->setWindowTitle(WindowTitle);
-    test->show();
+    CustomView->setWindowTitle(WindowTitle);
+    CustomView->show();
 
-
-    // EIChangeSlider *Button = new EIChangeSlider();
-    // // Button->move(windowPos);
-    // Button->show();
 
 }
 QJsonObject EIChangeFileView::ProtocoltoJson(QModelIndex CurrentIndex)

@@ -42,9 +42,7 @@ void EIChangeAttribute::ViewAddMenu(const MenuAttribute &Attribute, EIChangeBase
     {
         if(Attribute.Type == EIChangeBaseMenu::Text)
         {
-            QAction *Action = new QAction(Attribute.Name);
-            Menu->addAction(Action);
-
+            QAction *Action = Menu->addAction(Attribute.Name);
             if(Attribute.Parent == nullptr)
                 connect(Action,SIGNAL(triggered(bool)),this,SLOT(RightClickAction(bool)));
         }
@@ -57,6 +55,7 @@ void EIChangeAttribute::ViewAddMenu(const MenuAttribute &Attribute, EIChangeBase
             WidgetAction->setDefaultWidget(Container);
             Menu->addAction(WidgetAction);
 
+
             connect(Container, SIGNAL(EnterWidgetAction()), WidgetAction, SLOT(Actived()));
 
             if(Attribute.Parent == nullptr)
@@ -68,6 +67,12 @@ void EIChangeAttribute::ViewAddMenu(const MenuAttribute &Attribute, EIChangeBase
             EIChangeWidgetAction *WidgetAction = new EIChangeWidgetAction(Menu);
             WidgetAction->setText(Attribute.Name);
             WidgetAction->setProperty("Type", EIChangeBaseMenu::CheckandInput);
+
+            if(Attribute.CheckInterLock)
+            {
+                connect(Menu, SIGNAL(CheckInterLocked()), WidgetAction, SLOT(CheckInterLocked()));
+                connect(WidgetAction, SIGNAL(DisableCheck()), Container, SLOT(CheckInterLocked()));
+            }
 
             WidgetAction->setDefaultWidget(Container);
             Menu->addAction(WidgetAction);
@@ -84,7 +89,13 @@ void EIChangeAttribute::ViewAddMenu(const MenuAttribute &Attribute, EIChangeBase
             WidgetAction->setProperty("Type", EIChangeBaseMenu::CheckandInput);
 
             if(Attribute.CheckInterLock)
-                connect(Menu, SIGNAL(CheckInterLocked()), Container, SLOT(CheckInterLocked()));
+            {
+                connect(Menu, SIGNAL(CheckInterLocked()), WidgetAction, SLOT(CheckInterLocked()));
+                connect(WidgetAction, SIGNAL(DisableCheck()), Container, SLOT(CheckInterLocked()));
+            }
+
+
+
             WidgetAction->setDefaultWidget(Container);
             Menu->addAction(WidgetAction);
 
@@ -108,7 +119,7 @@ void EIChangeAttribute::RightClick(QAction *Action)
     static int count = 0;
     //获取发送者指针
     QMenu *childMenu=qobject_cast<QMenu *>(sender());
-    qDebug()<<count++<<childMenu->title()<<Action->text();
+    // qDebug()<<count++<<childMenu->title()<<Action->text();
     // //获取父菜单,直到没有父菜单为止
     // QMenu *parentMenu = childMenu;
     // while (parentMenu->parentWidget() != nullptr) {
@@ -123,9 +134,9 @@ void EIChangeAttribute::RightClickAction(bool Checked)
     QAction* Action = qobject_cast<QAction*>(sender());
     emit Click(Action);
     static int count = 0;
-    if (Action) {
-        qDebug() << count++ << Action->text();
-    }
+    // if (Action) {
+    //     qDebug() << count++ << Action->text();
+    // }
 
     // QMenu *parentMenu = Action->menu();
     // while (parentMenu->parentWidget() != nullptr) {

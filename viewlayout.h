@@ -8,7 +8,8 @@
 #include <QMenu>
 #include <QPushButton>
 
-#include<QHBoxLayout>
+#include <QHBoxLayout>
+
 #include "eichangebutton.h"
 #include "eichangeslider.h"
 #include "eichangedoubleslider.h"
@@ -24,8 +25,9 @@ class ViewLayout : public QWidget
     Q_OBJECT
 
 public:
-    explicit ViewLayout(QWidget *parent = nullptr);
+    explicit ViewLayout(QWidget *parent = nullptr, QJsonObject *Profiles = nullptr);
     ~ViewLayout();
+
 
     enum ViewRightMenu {
         View_AddButton = 0,
@@ -33,21 +35,17 @@ public:
         View_AddDoubleSlider,
         View_AddScope,
     };
+    QJsonObject *Profiles;
     bool isOpenLineEditControlSearch;
     QLineEdit *LineEditControlSearch;
 
     void ViewAddAction(QString Name, QMenu *Menu);
-
     QMenu* RClickMenu;
     QList<QString> RClickMenuText;
-
-    // QList<EIChangeButton*> EIChangeButtonGroup;
     QList<EIChangeSlider*> EIChangeSliderGroup;
     QList<EIChangeScope*> EIChangeScopeGroup;
 
 private:
-    // void DeleteChildWidget();
-    // void keyPressEvent(QKeyEvent *event);
     bool eventFilter(QObject *obj, QEvent *event) override;
 
 private slots:

@@ -259,7 +259,6 @@ void MainWindow::ProtocolRightClick()
     else if(action->text() == FileViewObj->ProtocolTree.RClickMenuText[EIChangeFileView::Protocol_AddProtocol])
     {
         FileViewObj->ProtocolViewAddItem();
-
     }
     else if(action->text() == FileViewObj->ProtocolTree.RClickMenuText[EIChangeFileView::Protocol_SaveFile])
     {
