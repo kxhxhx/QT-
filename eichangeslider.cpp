@@ -1,8 +1,9 @@
 #include "eichangeslider.h"
 #include "ui_eichangeslider.h"
 
-EIChangeSlider::EIChangeSlider(QWidget *Parent)
+EIChangeSlider::EIChangeSlider(QWidget *Parent, QJsonObject* Profile)
     : EIChangeBaseWidget(Parent, "Slider")
+    , Profile(Profile)
     , ui(new Ui::EIChangeSlider)
 {
     ui->setupUi(this);
@@ -19,6 +20,7 @@ EIChangeSlider::EIChangeSlider(QWidget *Parent)
     Attribute->RightMenuText.append(Delete);
 
     EIChangeAttribute::MenuAttribute* Name = new EIChangeAttribute::MenuAttribute("Name");
+    Name->CheckRoot = true;
     EIChangeAttribute::MenuAttribute* BindProtocolName = new EIChangeAttribute::MenuAttribute("BindProtocolName", EIChangeBaseMenu::Check, Name);
     BindProtocolName->CheckInterLock = true;
     EIChangeAttribute::MenuAttribute* CustomName = new EIChangeAttribute::MenuAttribute("CustomName: ", EIChangeBaseMenu::CheckandInput, Name, "Name");
@@ -26,10 +28,8 @@ EIChangeSlider::EIChangeSlider(QWidget *Parent)
     Attribute->RightMenuText.append(Name);
 
     EIChangeAttribute::MenuAttribute* BindProtocol = new EIChangeAttribute::MenuAttribute("BindProtocol");
-    // new EIChangeAttribute::MenuAttribute("Reset", EIChangeBaseMenu::Text, BindProtocol);
-    // new EIChangeAttribute::MenuAttribute("Move: ", EIChangeBaseMenu::CheckandInput, Actions, "00 00 00 00");
-    // new EIChangeAttribute::MenuAttribute("Release: ", EIChangeBaseMenu::CheckandInput, Actions, "00 00 00 00");
-    // new EIChangeAttribute::MenuAttribute("Edited: ", EIChangeBaseMenu::CheckandInput, Actions, "00 00 00 00");
+    BindProtocol->CheckRoot = true;
+    BindProtocol->JsonObjtoMenu(BindProtocol, Profile->value("ProtocolAction").toObject());
     Attribute->RightMenuText.append(BindProtocol);
 
     EIChangeAttribute::MenuAttribute* Actions = new EIChangeAttribute::MenuAttribute("Actions");
@@ -94,7 +94,6 @@ void EIChangeSlider::RightClick(QAction *Action)
     {
         QList<QAction*> ActionList;
         ActionList.append(Action);
-
         EIChangeBaseMenu *RootMenu = qobject_cast<EIChangeBaseMenu*>(Action->parent());
         while(RootMenu)
         {
@@ -118,6 +117,7 @@ void EIChangeSlider::RightClick(QAction *Action)
         }
         else if (ActionList[ActionList.size() - 2]->text() == Attribute->RightMenuText[1]->Name)
         {
+            // qDebug() << ActionList[ActionList.size() - 3]->text();
             if(ActionList[ActionList.size() - 3]->text() == Attribute->RightMenuText[1]->Child[0]->Name)
             {
                 EIChangeBaseMenu *ChildMenu = qobject_cast<EIChangeBaseMenu*>(ActionList[ActionList.size() - 3]->parent());
@@ -131,10 +131,36 @@ void EIChangeSlider::RightClick(QAction *Action)
                 emit ChildMenu->CheckInterLocked();
             }
         }
+        else if (ActionList[ActionList.size() - 2]->text() == Attribute->RightMenuText[2]->Name)
+        {
+            EIChangeBaseMenu *ChildMenu = qobject_cast<EIChangeBaseMenu*>(ActionList[ActionList.size() - 3]->parent());
+            ActionList[0]->setProperty("PressCheck", true);
+            emit ChildMenu->CheckInterLocked();
+
+
+
+            // QString arrowColor = "blue";  // 这里使用红色作为示例，你可以改为任何颜色
+            // QString styleSheet = QString("QMenu::right-arrow { background: %1; }").arg(arrowColor);
+
+            // ChildMenu = qobject_cast<EIChangeBaseMenu*>(ActionList[ActionList.size() - 3]->parent());
+            // ChildMenu->setStyleSheet(styleSheet);
+
+        }
+        else if (ActionList[ActionList.size() - 2]->text() == Attribute->RightMenuText[3]->Name)
+        {
+
+        }
+        else if (ActionList[ActionList.size() - 2]->text() == Attribute->RightMenuText[4]->Name)
+        {
+
+        }
 
     }
 
+}
 
+void EIChangeSlider::ActionChange()
+{
 
 }
 void EIChangeSlider::on_horizontalSlider_Data_sliderMoved(int position)

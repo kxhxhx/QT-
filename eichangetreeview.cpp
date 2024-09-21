@@ -1,22 +1,60 @@
 #include "eichangetreeview.h"
 
 EIChangeTreeView::EIChangeTreeView(QTreeView *TreeView, const QStringList Head)
-    :TreeViewTemp(TreeView)
-    ,RClickMenu(new QMenu)
+    : QObject(TreeView)
+    , TreeViewTemp(TreeView)
+    , Attribute(new EIChangeAttribute(TreeView, "TreeView"))
 {
     ModelTemp = new QStandardItemModel(TreeViewTemp);
     ModelTemp->setHorizontalHeaderLabels(Head);
     TreeViewTemp->setModel(ModelTemp);
 
-
-
 }
-void EIChangeTreeView::ViewAddAction(QString Name, QMenu *Menu)
+
+void EIChangeTreeView::CreateRowTreeData(QModelIndex CurrentIndex, QList<TreeData> RowTreeData)
 {
-    QAction *ActionObj = new QAction(Name);
-    Menu->addAction(ActionObj);
+    QList<QStandardItem *> ItemGroup;
+    for(int i = 0; i < RowTreeData.size(); i++)
+    {
+        QStandardItem *Item = new QStandardItem;
+        Item->setData(RowTreeData[i].Data, RowTreeData[i].Index);
+        Item->setEditable(RowTreeData[i].EditAble);
+        ItemGroup.append(Item);
+    }
+    if(CurrentIndex.isValid())
+    {
+        QStandardItem *CurrentItem = ModelTemp->itemFromIndex(CurrentIndex);
+        CurrentItem->appendRow(ItemGroup);
+    }
+    else
+    {
+        ModelTemp->appendRow(ItemGroup);
+    }
+
 }
 
+void EIChangeTreeView::CreateColumnTreeData(QModelIndex CurrentIndex, QList<TreeData> ColumnTreeData)
+{
+    QList<QStandardItem *> ItemGroup;
+    for(int i = 0; i < ColumnTreeData.size(); i++)
+    {
+        QStandardItem *Item = new QStandardItem;
+        Item->setData(ColumnTreeData[i].Data, ColumnTreeData[i].Index);
+        Item->setEditable(ColumnTreeData[i].EditAble);
+        ItemGroup.append(Item);
+    }
+
+    if(CurrentIndex.isValid())
+    {
+        QStandardItem *CurrentItem = ModelTemp->itemFromIndex(CurrentIndex);
+        CurrentItem->appendColumn(ItemGroup);
+    }
+    else
+    {
+        ModelTemp->appendColumn(ItemGroup);
+    }
+
+}
 QModelIndex EIChangeTreeView::FindItem(QString Name, QModelIndex CurrentIndex, int FlagChild)
 {
     if(!CurrentIndex.isValid())
@@ -114,12 +152,43 @@ void EIChangeTreeView::SetTreeData(QModelIndex CurrentIndex, QVariant RoleData, 
     Item->setData(RoleData, RoleIndex);
 }
 
+void EIChangeTreeView::SetTreeData(QModelIndex ParentIndex, QVariant RoleData, int RoleIndex, int Row, int Column)
+{
+    QModelIndex TargetIndex = ModelTemp->index(Row, Column, ParentIndex);
+    QStandardItem *Item = ModelTemp->itemFromIndex(TargetIndex);
+    Item->setData(RoleData, RoleIndex);
+}
+
+QJsonObject EIChangeTreeView::TreeDatatoJsonObj(QStandardItemModel *Model, QModelIndex ParentIndex, int Level)
+{
+    int RowCount = Model->rowCount(ParentIndex);
+    QJsonObject JsonObj = {};
+    for(int Row = 0; Row < RowCount; Row++)
+    {
+        QModelIndex Index = Model->index(Row, 0, ParentIndex);
+        if(Index.isValid())
+        {
+            int Type = Model->data(Index, Qt::UserRole + EIChangeTreeView::DataType).toInt();
+            if(Type)
+            {
+                QString ItemText = Model->data(Index).toString();
+                QJsonObject ChildJsonObj = TreeDatatoJsonObj(Model, Index, Level + 1);
+                ChildJsonObj.insert("Type", Type);
+                JsonObj.insert(ItemText, ChildJsonObj);
+            }
+
+        }
+    }
+    return JsonObj;
+}
+
 void EIChangeTreeView::CreateRowTreeData(QModelIndex CurrentIndex, QList<QVariant> RoleData, QList<int> RoleIndex)
 {
     QList<QStandardItem *> ItemGroup;
     for(int i = 0; i < RoleData.size(); i++)
     {
         QStandardItem *Item = new QStandardItem;
+
         Item->setData(RoleData[i], RoleIndex[i]);
         ItemGroup.append(Item);
     }
@@ -133,12 +202,19 @@ void EIChangeTreeView::CreateRowTreeData(QModelIndex CurrentIndex, QList<QVarian
         ModelTemp->appendRow(ItemGroup);
     }
 }
-
 void EIChangeTreeView::DeleteRowTreeData(QModelIndex CurrentIndex)
 {
     if(CurrentIndex.isValid())
     {
         ModelTemp->removeRow(CurrentIndex.row(), CurrentIndex.parent());
     }
+
+}
+
+EIChangeTreeView::TreeData::TreeData(QVariant Data, int Index, bool EditAble)
+    :Data(Data)
+    ,Index(Index)
+    ,EditAble(EditAble)
+{
 
 }

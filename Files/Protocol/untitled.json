@@ -1,44 +1,20 @@
 {
-    "File": {
-        "123": {
-            "Group": {
-                "untitledGroup": {
-                    "Group": {
-                        "untitled": {
-                            "CRC": "None",
-                            "Data": "None",
-                            "DataHead": "None",
-                            "DataTail": "None",
-                            "FunctionCode": "None",
-                            "SlaveAddress": "None",
-                            "Time": "2024/08/25 20:06",
-                            "Type": 3
-                        }
-                    },
-                    "Time": "2024/08/25 20:06",
-                    "Type": 2
-                }
-            },
-            "Time": "2024/08/25 20:03",
-            "Type": 2
+    "untitled.json": {
+        "Type": "File",
+        "untitled": {
+            "GroupCRC": "None",
+            "GroupDataHead": "None",
+            "GroupDataTail": "None",
+            "GroupSlaveAddress": "None",
+            "Type": "Group"
         },
-        "untitledGroup1": {
-            "Group": {
-                "untitled1": {
-                    "CRC": "None",
-                    "Data": "None",
-                    "DataHead": "None",
-                    "DataTail": "None",
-                    "FunctionCode": "None",
-                    "SlaveAddress": "None",
-                    "Time": "2024/08/25 20:07",
-                    "Type": 3
-                }
-            },
-            "Time": "2024/08/25 20:03",
-            "Type": 2
+        "untitled1": {
+            "CRC": "None",
+            "DataHead": "None",
+            "DataTail": "None",
+            "FunctionCode": "None",
+            "SlaveAddress": "None",
+            "Type": "Item"
         }
-    },
-    "Type": 1,
-    "Version": "Version 1.0 "
+    }
 }

@@ -52,7 +52,7 @@ else()
             eichangefiles.h eichangefiles.cpp
 
             eichangetreeview.h eichangetreeview.cpp
-            eichangefileview.h eichangefileview.cpp
+
             eichangebasewidget.h eichangebasewidget.cpp
             eichangebutton.h eichangebutton.cpp
             eichangeslider.h eichangeslider.cpp eichangeslider.ui
@@ -66,6 +66,8 @@ else()
             eichangeinputmenuwidget.h eichangeinputmenuwidget.cpp
 
             eichangewidgetaction.h eichangewidgetaction.cpp
+            eichangeprotocolfileview.h eichangeprotocolfileview.cpp
+            eichangeviewlayoutflieview.h eichangeviewlayoutflieview.cpp
 
 
 

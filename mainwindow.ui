@@ -216,9 +216,6 @@
       <item>
        <widget class="QTreeView" name="treeView_Protocol"/>
       </item>
-      <item>
-       <widget class="QTreeView" name="treeView_ProtocolFuncCode"/>
-      </item>
      </layout>
     </item>
     <item row="2" column="1">

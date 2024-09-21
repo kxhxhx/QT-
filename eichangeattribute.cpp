@@ -23,6 +23,9 @@ void EIChangeAttribute::ViewAddMenu(const MenuAttribute &Attribute, EIChangeBase
         if(Attribute.Parent == nullptr)
             connect(ChildMenu,SIGNAL(triggered(QAction*)),this,SLOT(RightClick(QAction*)));
 
+        if(Attribute.CheckRoot)
+            ChildMenu->CheckRoot = true;
+
 
         for(const MenuAttribute* child : Attribute.Child)
         {
@@ -45,6 +48,8 @@ void EIChangeAttribute::ViewAddMenu(const MenuAttribute &Attribute, EIChangeBase
             QAction *Action = Menu->addAction(Attribute.Name);
             if(Attribute.Parent == nullptr)
                 connect(Action,SIGNAL(triggered(bool)),this,SLOT(RightClickAction(bool)));
+
+
         }
         else if(Attribute.Type == EIChangeBaseMenu::Input)
         {
@@ -70,7 +75,20 @@ void EIChangeAttribute::ViewAddMenu(const MenuAttribute &Attribute, EIChangeBase
 
             if(Attribute.CheckInterLock)
             {
-                connect(Menu, SIGNAL(CheckInterLocked()), WidgetAction, SLOT(CheckInterLocked()));
+                EIChangeBaseMenu *RootCheckMenu = Menu;
+                while(RootCheckMenu)
+                {
+                    if(RootCheckMenu->CheckRoot)
+                        break;
+                    QString LastTitle = RootCheckMenu->title();
+                    QAction *AssociatedAction = RootCheckMenu->menuAction();
+                    RootCheckMenu = qobject_cast<EIChangeBaseMenu*>(AssociatedAction->parent());
+
+                    if(LastTitle == RootCheckMenu->title())
+                        break;
+                }
+                // qDebug() << RootCheckMenu->title();
+                connect(RootCheckMenu, SIGNAL(CheckInterLocked()), WidgetAction, SLOT(CheckInterLocked()));
                 connect(WidgetAction, SIGNAL(DisableCheck()), Container, SLOT(CheckInterLocked()));
             }
 
@@ -90,7 +108,19 @@ void EIChangeAttribute::ViewAddMenu(const MenuAttribute &Attribute, EIChangeBase
 
             if(Attribute.CheckInterLock)
             {
-                connect(Menu, SIGNAL(CheckInterLocked()), WidgetAction, SLOT(CheckInterLocked()));
+                EIChangeBaseMenu *RootCheckMenu = Menu;
+                while(RootCheckMenu)
+                {
+                    if(RootCheckMenu->CheckRoot)
+                        break;
+                    QString LastTitle = RootCheckMenu->title();
+                    QAction *AssociatedAction = RootCheckMenu->menuAction();
+                    RootCheckMenu = qobject_cast<EIChangeBaseMenu*>(AssociatedAction->parent());
+                    if(LastTitle == RootCheckMenu->title())
+                        break;
+                }
+                qDebug() << RootCheckMenu->title();
+                connect(RootCheckMenu, SIGNAL(CheckInterLocked()), WidgetAction, SLOT(CheckInterLocked()));
                 connect(WidgetAction, SIGNAL(DisableCheck()), Container, SLOT(CheckInterLocked()));
             }
 
@@ -157,3 +187,50 @@ EIChangeAttribute::MenuAttribute::MenuAttribute(const QString &text, int type, M
     }
 
 }
+
+EIChangeAttribute::MenuAttribute *EIChangeAttribute::MenuAttribute::JsonObjtoMenu(MenuAttribute *Parent, QJsonObject JsonObj)
+{
+    EIChangeAttribute::MenuAttribute* ChildMenuAttribute;
+    for (const QString &Key : JsonObj.keys())
+    {
+        QJsonObject ChildObject = JsonObj[Key].toObject();
+
+        if(ChildObject["Type"].toInt() == EIChangeAttribute::File)
+        {
+            ChildMenuAttribute = new EIChangeAttribute::MenuAttribute(Key, EIChangeBaseMenu::Text, Parent);
+            JsonObjtoMenu(ChildMenuAttribute, ChildObject);
+        }
+        else if(ChildObject["Type"].toInt() == EIChangeAttribute::Group)
+        {
+            ChildMenuAttribute = new EIChangeAttribute::MenuAttribute(Key, EIChangeBaseMenu::Text, Parent);
+            JsonObjtoMenu(ChildMenuAttribute, ChildObject);
+        }
+        else if(ChildObject["Type"].toInt() == EIChangeAttribute::Item)
+        {
+            ChildMenuAttribute = new EIChangeAttribute::MenuAttribute(Key, EIChangeBaseMenu::Check, Parent);
+            ChildMenuAttribute->CheckInterLock = true;
+        }
+        else
+        {
+            ChildMenuAttribute = new EIChangeAttribute::MenuAttribute();
+        }
+        // if(ChildObject.isEmpty())
+        // {
+        //     if(Key == "Type")
+        //     {
+
+        //     }
+        //     else
+        //     {
+
+        //     }
+        // }
+        // else
+        // {
+
+
+        // }
+    }
+    return ChildMenuAttribute;
+}
+

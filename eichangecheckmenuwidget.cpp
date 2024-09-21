@@ -152,6 +152,6 @@ void EIChangeCheckMenuWidget::DisplayTextChange(QString Text)
 void EIChangeCheckMenuWidget::CheckInterLocked()
 {
     // qDebug() << "CheckInterLocked";
-    qDebug() << CheckButton->text();
+    // qDebug() << CheckButton->text();
     CheckButton->setChecked(false);
 }

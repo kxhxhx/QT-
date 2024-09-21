@@ -1,36 +1,39 @@
 #include "viewlayout.h"
 #include "ui_viewlayout.h"
-ViewLayout::ViewLayout(QWidget *parent, QJsonObject *Profiles)
+ViewLayout::ViewLayout(QWidget *parent, QJsonObject Profile)
     : QWidget(parent)
-    , Profiles(Profiles)
+    , Attribute(new EIChangeAttribute(parent, "ViewLayout"))
+    , Profile(new QJsonObject(Profile))
     , ui(new Ui::ViewLayout)
     , LineEditControlSearch(new QLineEdit(this))
     , isOpenLineEditControlSearch(false)
-    , RClickMenu(new QMenu)
 {
     ui->setupUi(this);
     this->installEventFilter(this);
     this->setContextMenuPolicy(Qt::CustomContextMenu);
-    LineEditControlSearch->hide();
 
+    LineEditControlSearch->hide();
     connect(LineEditControlSearch, SIGNAL(returnPressed()), this, SLOT(ConfirmLineEditControlSearch()));
 
 
-    RClickMenuText.append("Add Button");
-    RClickMenuText.append("Add Slider");
-    RClickMenuText.append("Add DoubleSlider");
-    RClickMenuText.append("Add Scope");
+    EIChangeAttribute::MenuAttribute* AddButton = new EIChangeAttribute::MenuAttribute("Add Button");
+    Attribute->RightMenuText.append(AddButton);
+    EIChangeAttribute::MenuAttribute* AddSlider = new EIChangeAttribute::MenuAttribute("Add Slider");
+    Attribute->RightMenuText.append(AddSlider);
+    EIChangeAttribute::MenuAttribute* AddScope = new EIChangeAttribute::MenuAttribute("Add Scope");
+    Attribute->RightMenuText.append(AddScope);
+    Attribute->MenuConfig();
+    connect(Attribute, SIGNAL(Click(QAction*)), this, SLOT(RightClick(QAction*)));
 
 
-    for(const QString &MenuText : RClickMenuText)
-    {
-        ViewAddAction(MenuText, RClickMenu);
-    }
+    // QJsonObject JsonObj = Profile["ProtocolAction"].toObject();
 
-    foreach(QAction *Action, RClickMenu->actions())
-    {
-        connect(Action, SIGNAL(triggered(bool)), this, SLOT(ViewRightClick()));
-    }
+    // if(JsonObj.isEmpty())
+    // {
+
+    // }
+
+
 
 
 }
@@ -115,54 +118,74 @@ void ViewLayout::ConfirmLineEditControlSearch()
     DeleteLineEditControlSearch();
 }
 
-void ViewLayout::ViewRightClick()
+void ViewLayout::RightClick(QAction *Action)
 {
-    QAction *action = qobject_cast<QAction*>(sender());
-    if(action->text() == RClickMenuText[ViewLayout::View_AddButton])
+    if(Action)
     {
-        QPoint cursorPos = QCursor::pos();
-        QPoint windowPos = mapFromGlobal(cursorPos);
+        QList<QAction*> ActionList;
+        ActionList.append(Action);
 
-        QPushButton *Button = new QPushButton("New Button", this);
-        Button->move(windowPos);
-        Button->show();
+        EIChangeBaseMenu *RootMenu = qobject_cast<EIChangeBaseMenu*>(Action->parent());
+        while(RootMenu)
+        {
+            QString LastTitle = RootMenu->title();
+            QAction *AssociatedAction = RootMenu->menuAction();
+            ActionList.append(AssociatedAction);
+            RootMenu = qobject_cast<EIChangeBaseMenu*>(AssociatedAction->parent());
+            if(LastTitle == RootMenu->title())
+                break;
+        }
 
+        if(ActionList[ActionList.size() - 2]->text() == Attribute->RightMenuText[0]->Name)
+        {
+            QPoint cursorPos = QCursor::pos();
+            QPoint windowPos = mapFromGlobal(cursorPos);
+
+            QPushButton *Button = new QPushButton("New Button", this);
+            // connect(this, SIGNAL(ActionChange()), Button, SLOT(ActionChange()));
+            Button->move(windowPos);
+            Button->show();
+
+        }
+        else if (ActionList[ActionList.size() - 2]->text() == Attribute->RightMenuText[1]->Name)
+        {
+            QPoint cursorPos = QCursor::pos();
+            QPoint windowPos = mapFromGlobal(cursorPos);
+
+            QJsonObject *JsonObj = new QJsonObject();
+            QJsonObject ProtocolAction = Profile->value("ProtocolAction").toObject();
+            JsonObj->insert("ProtocolAction", ProtocolAction);
+
+            EIChangeSlider *Slider = new EIChangeSlider(this, JsonObj);
+            connect(this, SIGNAL(ActionChange()), Slider, SLOT(ActionChange()));
+
+            EIChangeSliderGroup.append(Slider);
+            Slider->show();
+            Slider->move(windowPos);
+
+        }
+        else if (ActionList[ActionList.size() - 2]->text() == Attribute->RightMenuText[2]->Name)
+        {
+            QPoint cursorPos = QCursor::pos();
+            QPoint windowPos = mapFromGlobal(cursorPos);
+
+            EIChangeScope *Scope = new EIChangeScope(this);
+            connect(this, SIGNAL(ActionChange()), Scope, SLOT(ActionChange()));
+            EIChangeScopeGroup.append(Scope);
+
+            Scope->show();
+            Scope->move(windowPos);
+
+        }
     }
-    else if(action->text() == RClickMenuText[ViewLayout::View_AddSlider])
-    {
-        QPoint cursorPos = QCursor::pos();
-        QPoint windowPos = mapFromGlobal(cursorPos);
-
-        EIChangeSlider *Slider = new EIChangeSlider(this);
-        EIChangeSliderGroup.append(Slider);
-        Slider->show();
-        Slider->move(windowPos);
-    }
-    else if(action->text() == RClickMenuText[ViewLayout::View_AddDoubleSlider])
-    {
-        QPoint cursorPos = QCursor::pos();
-        QPoint windowPos = mapFromGlobal(cursorPos);
-
-        EIChangeDoubleSlider *Slider = new EIChangeDoubleSlider(this);
-        Slider->show();
-        Slider->move(windowPos);
-    }
-    else if(action->text() == RClickMenuText[ViewLayout::View_AddScope])
-    {
-        QPoint cursorPos = QCursor::pos();
-        QPoint windowPos = mapFromGlobal(cursorPos);
-
-        EIChangeScope *Scope = new EIChangeScope(this);
-        EIChangeScopeGroup.append(Scope);
-        // connect(Scope, SIGNAL(Delete()), this, SLOT(DeleteChildWidget()));
-        Scope->show();
-        Scope->move(windowPos);
-    }
-
 }
 
+void ViewLayout::DataChange()
+{
+    emit ActionChange();
+}
 void ViewLayout::on_ViewLayout_customContextMenuRequested(const QPoint &pos)
 {
-    RClickMenu->exec(QCursor::pos());
+    Attribute->RClickMenu->exec(QCursor::pos());
 }
 

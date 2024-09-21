@@ -12,6 +12,7 @@
 #include <QRadioButton>
 #include <QLineEdit>
 #include <QWidgetAction>
+#include <QJsonObject>
 
 #include "eichangewidgetaction.h"
 #include "eichangebasemenuwidget.h"
@@ -25,6 +26,14 @@ class EIChangeAttribute : public QObject
 public:
     EIChangeAttribute(QObject *Parent, QString MenuName);
     ~EIChangeAttribute();
+
+    enum DataTypeEum
+    {
+        RootNode = 0,
+        File,
+        Group,
+        Item,
+    };
     struct MenuAttribute
     {
         QString Data;
@@ -33,7 +42,9 @@ public:
         QList<MenuAttribute*> Child;
         MenuAttribute *Parent;
         bool CheckInterLock = false;
+        bool CheckRoot = false;
         MenuAttribute(const QString &Text = " ", int Type = EIChangeBaseMenu::Text, MenuAttribute *Parent = nullptr, const QString &data = " ");
+        MenuAttribute* JsonObjtoMenu(MenuAttribute *Parent = nullptr,  QJsonObject JsonObj = QJsonObject());
     };
 
     EIChangeBaseMenu *RClickMenu;

@@ -1,0 +1,52 @@
+{
+    "untitled3.json": {
+        "Type": "File",
+        "untitled4": {
+            "CRC": "None",
+            "DataHead": "None",
+            "DataTail": "None",
+            "FunctionCode": "None",
+            "SlaveAddress": "None",
+            "Type": "Item"
+        },
+        "untitled6": {
+            "GroupCRC": "None",
+            "GroupDataHead": "None",
+            "GroupDataTail": "None",
+            "GroupSlaveAddress": "None",
+            "Type": "Group",
+            "untitled": {
+                "CRC": "None",
+                "DataHead": "None",
+                "DataTail": "None",
+                "FunctionCode": "None",
+                "SlaveAddress": "None",
+                "Type": "Item"
+            }
+        },
+        "untitled7": {
+            "CRC": "None",
+            "DataHead": "None",
+            "DataTail": "None",
+            "FunctionCode": "None",
+            "SlaveAddress": "None",
+            "Type": "Item"
+        },
+        "untitled8": {
+            "CRC": "None",
+            "DataHead": "None",
+            "DataTail": "None",
+            "FunctionCode": "None",
+            "SlaveAddress": "None",
+            "Type": "Item"
+        },
+        "untitled9": {
+            "CRC": "None",
+            "DataHead": "None",
+            "DataTail": "None",
+            "FunctionCode": "None",
+            "SlaveAddress": "None",
+            "Type": "Item"
+        }
+    }
+}

@@ -18,6 +18,7 @@ bool EIChangeWidgetAction::eventFilter(QObject *obj, QEvent *event)
 
 void EIChangeWidgetAction::CheckInterLocked()
 {
+    // qDebug() << this->text();
     if(!this->property("PressCheck").toBool())
     {
         emit DisableCheck();

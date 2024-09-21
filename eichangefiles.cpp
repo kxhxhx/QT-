@@ -25,6 +25,40 @@ QJsonObject EIChangeFiles::JsonRead(QString FilePath)
 
 }
 
+QJsonArray EIChangeFiles::JsonRead(QString FilePath, int FlagDiff)
+{
+    QJsonArray JsonArray = {};  // 初始化为一个空的 QJsonArray
+    QFile StartConfigFile(FilePath);
+
+    if (!StartConfigFile.open(QIODevice::ReadOnly))
+    {
+        qDebug() << "配置文件无法打开";
+        return JsonArray;  // 返回空的 QJsonArray
+    }
+
+    QByteArray StartConfigData(StartConfigFile.readAll());
+    StartConfigFile.close();
+
+    QJsonParseError jError;
+    QJsonDocument StartConfigjDoc = QJsonDocument::fromJson(StartConfigData, &jError);
+
+    if (jError.error != QJsonParseError::NoError)
+    {
+        qDebug() << "json文件格式错误" << jError.errorString();
+        return JsonArray;  // 返回空的 QJsonArray
+    }
+
+    // 检查文档是否是数组
+    if (StartConfigjDoc.isArray()) {
+        JsonArray = StartConfigjDoc.array();  // 将 JSON 数组赋值给 JsonArray
+    } else {
+        qDebug() << "JSON 文档不是数组";
+    }
+
+    return JsonArray;  // 返回读取的 QJsonArray
+
+}
+
 bool EIChangeFiles::JsonWrite(QString FilePath, QJsonObject JsonObj, int FlagClear)
 {
     QFile StartConfigFile(FilePath);
@@ -47,6 +81,37 @@ bool EIChangeFiles::JsonWrite(QString FilePath, QJsonObject JsonObj, int FlagCle
 
     QJsonDocument jsonDoc;
     jsonDoc.setObject(JsonObj);
+
+
+    StartConfigFile.write(jsonDoc.toJson());
+    StartConfigFile.close();
+
+    return true;
+
+}
+
+bool EIChangeFiles::JsonWrite(QString FilePath, QJsonArray JsonObj, int FlagClear)
+{
+    QFile StartConfigFile(FilePath);
+    if(FlagClear == 1)
+    {
+        if(!StartConfigFile.open(QIODevice::WriteOnly | QIODevice::Truncate))
+        {
+            qDebug() << "配置文件无法打开";
+            return false;
+        }
+    }
+    else
+    {
+        if(!StartConfigFile.open(QIODevice::WriteOnly))
+        {
+            qDebug() << "配置文件无法打开";
+            return false;
+        }
+    }
+
+    QJsonDocument jsonDoc;
+    jsonDoc.setArray(JsonObj);
 
 
     StartConfigFile.write(jsonDoc.toJson());

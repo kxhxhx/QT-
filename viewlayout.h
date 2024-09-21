@@ -7,12 +7,10 @@
 #include <QLineEdit>
 #include <QMenu>
 #include <QPushButton>
-
 #include <QHBoxLayout>
-
+#include "eichangeattribute.h"
 #include "eichangebutton.h"
 #include "eichangeslider.h"
-#include "eichangedoubleslider.h"
 #include "eichangescope.h"
 
 
@@ -25,33 +23,29 @@ class ViewLayout : public QWidget
     Q_OBJECT
 
 public:
-    explicit ViewLayout(QWidget *parent = nullptr, QJsonObject *Profiles = nullptr);
+    explicit ViewLayout(QWidget *parent = nullptr, QJsonObject Profiles = QJsonObject());
     ~ViewLayout();
 
-
-    enum ViewRightMenu {
-        View_AddButton = 0,
-        View_AddSlider,
-        View_AddDoubleSlider,
-        View_AddScope,
-    };
-    QJsonObject *Profiles;
+    EIChangeAttribute *Attribute;
+    QJsonObject *Profile;
     bool isOpenLineEditControlSearch;
     QLineEdit *LineEditControlSearch;
 
     void ViewAddAction(QString Name, QMenu *Menu);
-    QMenu* RClickMenu;
-    QList<QString> RClickMenuText;
+
     QList<EIChangeSlider*> EIChangeSliderGroup;
     QList<EIChangeScope*> EIChangeScopeGroup;
 
+signals:
+    void ActionChange();
 private:
     bool eventFilter(QObject *obj, QEvent *event) override;
 
 private slots:
+    void RightClick(QAction* Action);
+    void DataChange();
     void DeleteLineEditControlSearch();
     void ConfirmLineEditControlSearch();
-    void ViewRightClick();
     void on_ViewLayout_customContextMenuRequested(const QPoint &pos);
 
 private:

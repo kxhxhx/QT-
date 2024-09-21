@@ -172,35 +172,25 @@ bool MainWindow::Config()
     ui->treeView_ViewLayout->setContextMenuPolicy(Qt::CustomContextMenu);
 
     QStringList ProtocolHead;
-    ProtocolHead <<"FilesName"
-                 <<"Time"
-                 <<"DataHead"
-                 <<"SlaveAddress"
-                 <<"FunctionCode"
-                 <<"Data"
-                 <<"CRC"
-                 <<"DataTail";
+    ProtocolHead <<"Name"
+                 <<"Data";
 
     QStringList ViewLayoutHead;
 
-    ViewLayoutHead <<"FilesName"
-                   <<"Time";
-
-    FileViewObj = new EIChangeFileView(ui->treeView_Protocol,
-                                       ui->treeView_ViewLayout,
-                                       ProtocolHead,
-                                       ViewLayoutHead);
-
-    foreach(QAction *Action, FileViewObj->ProtocolTree.RClickMenu->actions())
-    {
-        connect(Action, SIGNAL(triggered(bool)), this, SLOT(ProtocolRightClick()));
-    }
+    ViewLayoutHead <<"Name"
+                   <<"Data";
 
 
-    foreach(QAction *Action, FileViewObj->ViewLayoutTree.RClickMenu->actions())
-    {
-        connect(Action, SIGNAL(triggered(bool)), this, SLOT(ViewLayoutRightClick()));
-    }
+    ProtocolView = new EIChangeProtocolFileView(ui->treeView_Protocol, ProtocolHead);
+    ViewLayOutView = new EIChangeViewLayoutFlieView(ui->treeView_ViewLayout, ViewLayoutHead);
+    ViewLayOutView->DataModel = ProtocolView->ModelTemp;
+
+
+    // FileViewObj = new EIChangeFileView(ui->treeView_Protocol,
+    //                                    ui->treeView_ViewLayout,
+    //                                    ProtocolHead,
+    //                                    ViewLayoutHead);
+
 
 
     JsonSettings.SettingsJsonConfig();
@@ -245,40 +235,66 @@ bool MainWindow::EIChangeCloseSave()
     return JsonSettings.FileOperation.JsonWrite(JsonSettings.SettingsFilePath, JsonSettings.StartConfigJsonObj, 1);
 }
 
-void MainWindow::ProtocolRightClick()
+void MainWindow::ProtocolRightClick(QAction *Action)
 {
-    QAction *action = qobject_cast<QAction*>(sender());
-    if(action->text() == FileViewObj->ProtocolTree.RClickMenuText[EIChangeFileView::Protocol_AddFile])
-    {
-        FileViewObj->ProtocolViewAddFile();
-    }
-    else if(action->text() == FileViewObj->ProtocolTree.RClickMenuText[EIChangeFileView::Protocol_AddGroup])
-    {
-        FileViewObj->ProtocolViewAddGroup();
-    }
-    else if(action->text() == FileViewObj->ProtocolTree.RClickMenuText[EIChangeFileView::Protocol_AddProtocol])
-    {
-        FileViewObj->ProtocolViewAddItem();
-    }
-    else if(action->text() == FileViewObj->ProtocolTree.RClickMenuText[EIChangeFileView::Protocol_SaveFile])
-    {
-        FileViewObj->ProtocolViewSaveFile();
-    }
-    else if(action->text() == FileViewObj->ProtocolTree.RClickMenuText[EIChangeFileView::Protocol_DeleteFile])
-    {
-        FileViewObj->ProtocolViewDeleteFile();
-    }
+    // QAction *action = qobject_cast<QAction*>(sender());
+    // if(action->text() == FileViewObj->ProtocolTree.RClickMenuText[EIChangeFileView::Protocol_AddFile])
+    // {
+    //     FileViewObj->ProtocolViewAddFile();
+    // }
+    // else if(action->text() == FileViewObj->ProtocolTree.RClickMenuText[EIChangeFileView::Protocol_AddGroup])
+    // {
+    //     FileViewObj->ProtocolViewAddGroup();
+    // }
+    // else if(action->text() == FileViewObj->ProtocolTree.RClickMenuText[EIChangeFileView::Protocol_AddProtocol])
+    // {
+    //     FileViewObj->ProtocolViewAddItem();
+    // }
+    // else if(action->text() == FileViewObj->ProtocolTree.RClickMenuText[EIChangeFileView::Protocol_SaveFile])
+    // {
+    //     FileViewObj->ProtocolViewSaveFile();
+    // }
+    // else if(action->text() == FileViewObj->ProtocolTree.RClickMenuText[EIChangeFileView::Protocol_DeleteFile])
+    // {
+    //     FileViewObj->ProtocolViewDeleteFile();
+    // }
 }
 
-void MainWindow::ViewLayoutRightClick()
+void MainWindow::ViewLayoutRightClick(QAction *Action)
 {
-    QAction *action = qobject_cast<QAction*>(sender());
-    if(action->text() == FileViewObj->ViewLayoutTree.RClickMenuText[EIChangeFileView::ViewLayout_AddFile])
-    {
-        FileViewObj->ViewLayoutViewAddFile();
+    // if(Action)
+    // {
+    //     QList<QAction*> ActionList;
+    //     ActionList.append(Action);
 
-    }
+    //     EIChangeBaseMenu *RootMenu = qobject_cast<EIChangeBaseMenu*>(Action->parent());
+    //     while(RootMenu)
+    //     {
+    //         QString LastTitle = RootMenu->title();
+    //         QAction *AssociatedAction = RootMenu->menuAction();
+    //         ActionList.append(AssociatedAction);
+    //         RootMenu = qobject_cast<EIChangeBaseMenu*>(AssociatedAction->parent());
+    //         if(LastTitle == RootMenu->title())
+    //             break;
+    //     }
 
+    //     if(ActionList[ActionList.size() - 2]->text() == Attribute->RightMenuText[0]->Name)
+    //     {
+    //         this->deleteLater();
+    //         return;
+    //     }
+    //     else if (ActionList[ActionList.size() - 2]->text() == Attribute->RightMenuText[1]->Name)
+    //     {
+
+    //     }
+
+    // }
+
+
+}
+
+void MainWindow::TestRightClick(QAction *Action)
+{
 
 }
 
@@ -313,19 +329,18 @@ void MainWindow::on_pushButton_Load_clicked()
 
 void MainWindow::on_treeView_Protocol_customContextMenuRequested(const QPoint &pos)
 {
-    // CustomProtocol.RClickMenu->exec(pos);
-    FileViewObj->ProtocolTree.RClickMenu->exec(QCursor::pos());
+    ProtocolView->Attribute->RClickMenu->exec(QCursor::pos());
 }
 
 
 void MainWindow::on_treeView_ViewLayout_customContextMenuRequested(const QPoint &pos)
 {
-    FileViewObj->ViewLayoutTree.RClickMenu->exec(QCursor::pos());
+    ViewLayOutView->Attribute->RClickMenu->exec(QCursor::pos());
 }
 
 
 void MainWindow::on_pushButton_Find_clicked()
 {
-    FileViewObj->FindProtocol(ui->lineEdit_FindProtocolName->text());
+    // FileViewObj->FindProtocol(ui->lineEdit_FindProtocolName->text());
 }
 

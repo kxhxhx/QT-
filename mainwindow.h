@@ -9,7 +9,8 @@
 
 #include "eichangesettings.h"
 #include "viewlayout.h"
-#include "eichangefileview.h"
+#include "eichangeprotocolfileview.h"
+#include "eichangeviewlayoutflieview.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -29,7 +30,8 @@ public:
 
     ViewLayout CustomViewLayout;
 
-    EIChangeFileView *FileViewObj;
+    EIChangeProtocolFileView * ProtocolView;
+    EIChangeViewLayoutFlieView * ViewLayOutView;
 
     QList<QSerialPort*> SerialPortGroup;
     QList<int> SerialPortNumber;
@@ -50,15 +52,14 @@ private:
 
 
 private slots:
-    void ProtocolRightClick(void);
+    void ProtocolRightClick(QAction *Action);
+    void ViewLayoutRightClick(QAction *Action);
+    void TestRightClick(QAction *Action);
 
-
-    void ViewLayoutRightClick(void);
 
 private slots:
     void on_comboBox_DataEngine_currentIndexChanged(int index);
     void on_pushButton_Load_clicked();
-
     void on_treeView_Protocol_customContextMenuRequested(const QPoint &pos);
     void on_treeView_ViewLayout_customContextMenuRequested(const QPoint &pos);
     void on_pushButton_Find_clicked();

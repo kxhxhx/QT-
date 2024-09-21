@@ -41,6 +41,8 @@ public:
 
     int CheckInterLock = 0;
 
+    bool CheckRoot = false;
+
 
 signals:
     void CheckActionTrigger(QAction *Action);

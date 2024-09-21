@@ -5,11 +5,13 @@
 #include <QTreeView>
 #include <QStandardItemModel>
 #include "eichangefiles.h"
+#include "eichangeattribute.h"
 
-class EIChangeTreeView
+class EIChangeTreeView : public QObject
 {
-
+    Q_OBJECT
 public:
+    explicit EIChangeTreeView(QTreeView *TreeView, const QStringList Head);
 
     enum TreeDataRoleEum
     {
@@ -17,30 +19,34 @@ public:
         DataType,
 
     };
-    enum DataTypeEum
-    {
-        RootNode = 0,
-        File,
-        Group,
-        Item,
-    };
-    EIChangeFiles FileOperation;
 
+    struct TreeData
+    {
+        QVariant Data;
+        int Index;
+        bool EditAble;
+        TreeData(QVariant Data, int Index, bool EditAble);
+    };
     QTreeView *TreeViewTemp;
     QStandardItemModel *ModelTemp;
 
-    QMenu* RClickMenu;
-    QList<QString> RClickMenuText;
+    EIChangeFiles FileOperation;
+    EIChangeAttribute *Attribute;
 
 
-    EIChangeTreeView(QTreeView *TreeView, const QStringList Head);
-    void ViewAddAction(QString Name, QMenu* Menu);
+    void CreateRowTreeData(QModelIndex CurrentIndex, QList<QVariant> RoleData, QList<int> RoleIndex);
+    void CreateRowTreeData(QModelIndex CurrentIndex, QList<TreeData> RowTreeData);
+    void CreateColumnTreeData(QModelIndex CurrentIndex, QList<TreeData> ColumnTreeData);
+
+    void SetTreeData(QModelIndex CurrentIndex, QVariant RoleData, int Column, int RoleIndex);
+    void SetTreeData(QModelIndex ParentIndex, QVariant RoleData, int RoleIndex, int Row, int Column);
+
+    QJsonObject TreeDatatoJsonObj(QStandardItemModel *Model, QModelIndex ParentIndex, int Level);
+
     QModelIndex FindItem(QString Name, QModelIndex CurrentIndex, int FlagChild);
     bool isContain(QString Name, QModelIndex CurrentIndex, int FlagChild);
     QModelIndex GetRootIndex(QModelIndex CurrentIndex);
     QString GetNewName(QModelIndex CurrentIndex, QString BaseName, QString ExtensionName, int FlagChild);
-    void SetTreeData(QModelIndex CurrentIndex, QVariant RoleData, int Column, int RoleIndex);
-    void CreateRowTreeData(QModelIndex CurrentIndex, QList<QVariant> RoleData, QList<int> RoleIndex);
     void DeleteRowTreeData(QModelIndex CurrentIndex);
 
 };

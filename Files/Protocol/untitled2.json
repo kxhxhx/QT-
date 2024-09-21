@@ -1,0 +1,28 @@
+{
+    "untitled2.json": {
+        "Type": "File",
+        "untitled3": {
+            "CRC": "None",
+            "DataHead": "None",
+            "DataTail": "None",
+            "FunctionCode": "None",
+            "SlaveAddress": "None",
+            "Type": "Item"
+        },
+        "untitled5": {
+            "GroupCRC": "None",
+            "GroupDataHead": "None",
+            "GroupDataTail": "None",
+            "GroupSlaveAddress": "None",
+            "Type": "Group",
+            "untitled": {
+                "CRC": "None",
+                "DataHead": "None",
+                "DataTail": "None",
+                "FunctionCode": "None",
+                "SlaveAddress": "None",
+                "Type": "Item"
+            }
+        }
+    }
+}
