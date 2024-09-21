@@ -21,7 +21,9 @@ public:
         QString Name;
         QString Data;
     };
-    QStandardItemModel *DataModel;
+    EIChangeItemMode *DataModel;
+
+    QList<ViewLayout*> ViewLayoutList;
 
     QString FilePath = "../../Files/ViewLayout/";
     QString Version;

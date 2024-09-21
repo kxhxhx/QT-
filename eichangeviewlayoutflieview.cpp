@@ -10,6 +10,8 @@ EIChangeViewLayoutFlieView::EIChangeViewLayoutFlieView(QTreeView *TreeView, cons
     TreeView->showDropIndicator();
     TreeView->setDragDropMode(QTreeView::InternalMove);
 
+    EIChangeAttribute::MenuAttribute* Open = new EIChangeAttribute::MenuAttribute("Open");
+    Attribute->RightMenuText.append(Open);
     EIChangeAttribute::MenuAttribute* Save = new EIChangeAttribute::MenuAttribute("Save");
     Attribute->RightMenuText.append(Save);
     EIChangeAttribute::MenuAttribute* Delete = new EIChangeAttribute::MenuAttribute("Delete");
@@ -79,11 +81,15 @@ void EIChangeViewLayoutFlieView::RightClick(QAction *Action)
         }
         else if (ActionList[ActionList.size() - 2]->text() == Attribute->RightMenuText[1]->Name)
         {
+
+        }
+        else if (ActionList[ActionList.size() - 2]->text() == Attribute->RightMenuText[2]->Name)
+        {
             QModelIndex TargetIndex = TreeViewTemp->currentIndex();
             DeleteRowTreeData(TargetIndex);
 
         }
-        else if (ActionList[ActionList.size() - 2]->text() == Attribute->RightMenuText[2]->Name)
+        else if (ActionList[ActionList.size() - 2]->text() == Attribute->RightMenuText[3]->Name)
         {
             QStandardItem *TargetItem = ModelTemp->item(ModelTemp->rowCount() - 1);
             QModelIndex TargetIndex = ModelTemp->indexFromItem(TargetItem);
@@ -97,9 +103,11 @@ void EIChangeViewLayoutFlieView::RightClick(QAction *Action)
             QJsonObject JsonObj;
 
             JsonObj.insert("ProtocolAction", TreeDatatoJsonObj(DataModel, DataModel->invisibleRootItem()->index(), 0));
+            ViewLayout *CustomView = new ViewLayout(nullptr, JsonObj, DataModel);
+
+            ViewLayoutList.append(CustomView);
 
 
-            ViewLayout *CustomView = new ViewLayout(nullptr, JsonObj);
             QString WindowTitle;
             if(Data.Name.indexOf(".json") != -1)
                 WindowTitle = Data.Name.left(Data.Name.indexOf(".json"));

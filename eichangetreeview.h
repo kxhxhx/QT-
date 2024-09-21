@@ -4,6 +4,8 @@
 #include <QMenu>
 #include <QTreeView>
 #include <QStandardItemModel>
+#include "eichangeitemmodel.h"
+
 #include "eichangefiles.h"
 #include "eichangeattribute.h"
 
@@ -28,7 +30,7 @@ public:
         TreeData(QVariant Data, int Index, bool EditAble);
     };
     QTreeView *TreeViewTemp;
-    QStandardItemModel *ModelTemp;
+    EIChangeItemMode *ModelTemp;
 
     EIChangeFiles FileOperation;
     EIChangeAttribute *Attribute;
@@ -49,6 +51,8 @@ public:
     QString GetNewName(QModelIndex CurrentIndex, QString BaseName, QString ExtensionName, int FlagChild);
     void DeleteRowTreeData(QModelIndex CurrentIndex);
 
+private slots:
+    void DataChange(QModelIndex topLeft, QModelIndex bottomRight, QVector<int> roles);
 };
 
 #endif // EICHANGETREEVIEW_H

@@ -5,9 +5,11 @@ EIChangeTreeView::EIChangeTreeView(QTreeView *TreeView, const QStringList Head)
     , TreeViewTemp(TreeView)
     , Attribute(new EIChangeAttribute(TreeView, "TreeView"))
 {
-    ModelTemp = new QStandardItemModel(TreeViewTemp);
+    ModelTemp = new EIChangeItemMode(TreeViewTemp);
     ModelTemp->setHorizontalHeaderLabels(Head);
     TreeViewTemp->setModel(ModelTemp);
+
+    connect(ModelTemp, SIGNAL(dataChanged(QModelIndex,QModelIndex,QVector<int>)), this, SLOT(DataChange(QModelIndex,QModelIndex,QVector<int>)));
 
 }
 
@@ -208,7 +210,13 @@ void EIChangeTreeView::DeleteRowTreeData(QModelIndex CurrentIndex)
     {
         ModelTemp->removeRow(CurrentIndex.row(), CurrentIndex.parent());
     }
+}
 
+void EIChangeTreeView::DataChange(QModelIndex topLeft, QModelIndex bottomRight, QVector<int> roles)
+{
+    // QString
+    // isContain();
+    ModelTemp->data(topLeft).toString();
 }
 
 EIChangeTreeView::TreeData::TreeData(QVariant Data, int Index, bool EditAble)

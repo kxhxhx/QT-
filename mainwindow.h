@@ -28,7 +28,7 @@ public:
 
     EIChangeSettings JsonSettings;
 
-    ViewLayout CustomViewLayout;
+    // ViewLayout CustomViewLayout;
 
     EIChangeProtocolFileView * ProtocolView;
     EIChangeViewLayoutFlieView * ViewLayOutView;

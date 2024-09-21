@@ -68,6 +68,7 @@ else()
             eichangewidgetaction.h eichangewidgetaction.cpp
             eichangeprotocolfileview.h eichangeprotocolfileview.cpp
             eichangeviewlayoutflieview.h eichangeviewlayoutflieview.cpp
+            eichangeitemmodel.h eichangeitemmodel.cpp
 
 
 

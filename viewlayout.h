@@ -9,6 +9,9 @@
 #include <QPushButton>
 #include <QHBoxLayout>
 #include "eichangeattribute.h"
+#include "eichangeitemmodel.h"
+
+
 #include "eichangebutton.h"
 #include "eichangeslider.h"
 #include "eichangescope.h"
@@ -23,10 +26,12 @@ class ViewLayout : public QWidget
     Q_OBJECT
 
 public:
-    explicit ViewLayout(QWidget *parent = nullptr, QJsonObject Profiles = QJsonObject());
+    explicit ViewLayout(QWidget *parent = nullptr, QJsonObject Profiles = QJsonObject(), EIChangeItemMode *DataModel = nullptr);
     ~ViewLayout();
 
     EIChangeAttribute *Attribute;
+
+    QStandardItemModel *DataModel;
     QJsonObject *Profile;
     bool isOpenLineEditControlSearch;
     QLineEdit *LineEditControlSearch;
@@ -38,12 +43,13 @@ public:
 
 signals:
     void ActionChange();
+
 private:
     bool eventFilter(QObject *obj, QEvent *event) override;
 
 private slots:
     void RightClick(QAction* Action);
-    void DataChange();
+    void DataChange(QModelIndex topLeft, QModelIndex bottomRight, QVector<int> roles);
     void DeleteLineEditControlSearch();
     void ConfirmLineEditControlSearch();
     void on_ViewLayout_customContextMenuRequested(const QPoint &pos);

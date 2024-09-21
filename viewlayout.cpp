@@ -1,9 +1,10 @@
 #include "viewlayout.h"
 #include "ui_viewlayout.h"
-ViewLayout::ViewLayout(QWidget *parent, QJsonObject Profile)
+ViewLayout::ViewLayout(QWidget *parent, QJsonObject Profile, EIChangeItemMode *DataModel)
     : QWidget(parent)
     , Attribute(new EIChangeAttribute(parent, "ViewLayout"))
     , Profile(new QJsonObject(Profile))
+    , DataModel(DataModel)
     , ui(new Ui::ViewLayout)
     , LineEditControlSearch(new QLineEdit(this))
     , isOpenLineEditControlSearch(false)
@@ -26,6 +27,7 @@ ViewLayout::ViewLayout(QWidget *parent, QJsonObject Profile)
     connect(Attribute, SIGNAL(Click(QAction*)), this, SLOT(RightClick(QAction*)));
 
 
+    connect(DataModel, SIGNAL(dataChanged(QModelIndex, QModelIndex, QVector<int>)), this, SLOT(DataChange(QModelIndex, QModelIndex, QVector<int>)));
     // QJsonObject JsonObj = Profile["ProtocolAction"].toObject();
 
     // if(JsonObj.isEmpty())
@@ -180,8 +182,13 @@ void ViewLayout::RightClick(QAction *Action)
     }
 }
 
-void ViewLayout::DataChange()
+void ViewLayout::DataChange(QModelIndex topLeft, QModelIndex bottomRight, QVector<int> roles)
 {
+    // qDebug() << "DataChange";
+
+    qDebug() << DataModel->data(topLeft);
+    qDebug() << DataModel->data(bottomRight);
+    qDebug() << roles;
     emit ActionChange();
 }
 void ViewLayout::on_ViewLayout_customContextMenuRequested(const QPoint &pos)
